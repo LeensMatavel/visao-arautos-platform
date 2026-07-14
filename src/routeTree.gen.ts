@@ -9,38 +9,214 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OracaoRouteImport } from './routes/oracao'
+import { Route as MissoesRouteImport } from './routes/missoes'
+import { Route as EventosRouteImport } from './routes/eventos'
+import { Route as EscolaRouteImport } from './routes/escola'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ComunidadeRouteImport } from './routes/comunidade'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EscolaCourseIdRouteImport } from './routes/escola.$courseId'
 
+const OracaoRoute = OracaoRouteImport.update({
+  id: '/oracao',
+  path: '/oracao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissoesRoute = MissoesRouteImport.update({
+  id: '/missoes',
+  path: '/missoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventosRoute = EventosRouteImport.update({
+  id: '/eventos',
+  path: '/eventos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EscolaRoute = EscolaRouteImport.update({
+  id: '/escola',
+  path: '/escola',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComunidadeRoute = ComunidadeRouteImport.update({
+  id: '/comunidade',
+  path: '/comunidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EscolaCourseIdRoute = EscolaCourseIdRouteImport.update({
+  id: '/$courseId',
+  path: '/$courseId',
+  getParentRoute: () => EscolaRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/blog': typeof BlogRoute
+  '/comunidade': typeof ComunidadeRoute
+  '/dashboard': typeof DashboardRoute
+  '/escola': typeof EscolaRouteWithChildren
+  '/eventos': typeof EventosRoute
+  '/missoes': typeof MissoesRoute
+  '/oracao': typeof OracaoRoute
+  '/escola/$courseId': typeof EscolaCourseIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/blog': typeof BlogRoute
+  '/comunidade': typeof ComunidadeRoute
+  '/dashboard': typeof DashboardRoute
+  '/escola': typeof EscolaRouteWithChildren
+  '/eventos': typeof EventosRoute
+  '/missoes': typeof MissoesRoute
+  '/oracao': typeof OracaoRoute
+  '/escola/$courseId': typeof EscolaCourseIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/blog': typeof BlogRoute
+  '/comunidade': typeof ComunidadeRoute
+  '/dashboard': typeof DashboardRoute
+  '/escola': typeof EscolaRouteWithChildren
+  '/eventos': typeof EventosRoute
+  '/missoes': typeof MissoesRoute
+  '/oracao': typeof OracaoRoute
+  '/escola/$courseId': typeof EscolaCourseIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/blog'
+    | '/comunidade'
+    | '/dashboard'
+    | '/escola'
+    | '/eventos'
+    | '/missoes'
+    | '/oracao'
+    | '/escola/$courseId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/blog'
+    | '/comunidade'
+    | '/dashboard'
+    | '/escola'
+    | '/eventos'
+    | '/missoes'
+    | '/oracao'
+    | '/escola/$courseId'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/blog'
+    | '/comunidade'
+    | '/dashboard'
+    | '/escola'
+    | '/eventos'
+    | '/missoes'
+    | '/oracao'
+    | '/escola/$courseId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  BlogRoute: typeof BlogRoute
+  ComunidadeRoute: typeof ComunidadeRoute
+  DashboardRoute: typeof DashboardRoute
+  EscolaRoute: typeof EscolaRouteWithChildren
+  EventosRoute: typeof EventosRoute
+  MissoesRoute: typeof MissoesRoute
+  OracaoRoute: typeof OracaoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/oracao': {
+      id: '/oracao'
+      path: '/oracao'
+      fullPath: '/oracao'
+      preLoaderRoute: typeof OracaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/missoes': {
+      id: '/missoes'
+      path: '/missoes'
+      fullPath: '/missoes'
+      preLoaderRoute: typeof MissoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eventos': {
+      id: '/eventos'
+      path: '/eventos'
+      fullPath: '/eventos'
+      preLoaderRoute: typeof EventosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/escola': {
+      id: '/escola'
+      path: '/escola'
+      fullPath: '/escola'
+      preLoaderRoute: typeof EscolaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comunidade': {
+      id: '/comunidade'
+      path: '/comunidade'
+      fullPath: '/comunidade'
+      preLoaderRoute: typeof ComunidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +224,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/escola/$courseId': {
+      id: '/escola/$courseId'
+      path: '/$courseId'
+      fullPath: '/escola/$courseId'
+      preLoaderRoute: typeof EscolaCourseIdRouteImport
+      parentRoute: typeof EscolaRoute
+    }
   }
 }
 
+interface EscolaRouteChildren {
+  EscolaCourseIdRoute: typeof EscolaCourseIdRoute
+}
+
+const EscolaRouteChildren: EscolaRouteChildren = {
+  EscolaCourseIdRoute: EscolaCourseIdRoute,
+}
+
+const EscolaRouteWithChildren =
+  EscolaRoute._addFileChildren(EscolaRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  BlogRoute: BlogRoute,
+  ComunidadeRoute: ComunidadeRoute,
+  DashboardRoute: DashboardRoute,
+  EscolaRoute: EscolaRouteWithChildren,
+  EventosRoute: EventosRoute,
+  MissoesRoute: MissoesRoute,
+  OracaoRoute: OracaoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

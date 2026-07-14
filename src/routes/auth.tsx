@@ -1,0 +1,153 @@
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { z } from "zod";
+import { useAuth } from "@/lib/auth-context";
+import { toast } from "sonner";
+
+const search = z.object({
+  mode: z.enum(["login", "register"]).optional(),
+});
+
+export const Route = createFileRoute("/auth")({
+  validateSearch: search,
+  component: AuthPage,
+});
+
+function AuthPage() {
+  const { mode = "login" } = Route.useSearch();
+  const isRegister = mode === "register";
+  const navigate = useNavigate();
+  const { login, register } = useAuth();
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const email = String(form.get("email") || "");
+    const password = String(form.get("password") || "");
+    const name = String(form.get("name") || "");
+    if (!email || !password || (isRegister && !name)) {
+      toast.error("Preencha todos os campos.");
+      return;
+    }
+    setLoading(true);
+    try {
+      if (isRegister) await register(name, email, password);
+      else await login(email, password);
+      toast.success(isRegister ? "Conta criada. Bem-vindo, arauto!" : "Bem-vindo de volta.");
+      navigate({ to: "/dashboard" });
+    } catch {
+      toast.error("Não foi possível autenticar.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="bg-hero relative min-h-screen">
+      <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_center,oklch(0.82_0.13_85/0.15)_1px,transparent_1px)] [background-size:32px_32px]" />
+      <div className="relative mx-auto grid min-h-screen max-w-6xl px-4 sm:px-6 lg:grid-cols-2">
+        <div className="hidden flex-col justify-between py-12 pr-12 lg:flex">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="bg-gold grid h-9 w-9 place-items-center rounded-full">
+              <span className="font-display text-primary-foreground text-lg font-bold">A</span>
+            </div>
+            <span className="font-display text-lg">Visão Arautos</span>
+          </Link>
+          <div>
+            <h2 className="font-display text-5xl leading-tight">
+              "Ide por todo o <span className="text-gold-gradient">mundo</span>
+              e pregai o evangelho a toda criatura."
+            </h2>
+            <p className="text-muted-foreground mt-6 text-sm tracking-widest uppercase">
+              Marcos 16.15
+            </p>
+          </div>
+          <p className="text-muted-foreground text-xs">
+            © {new Date().getFullYear()} Visão Arautos
+          </p>
+        </div>
+
+        <div className="flex items-center py-12 lg:py-0">
+          <div className="w-full max-w-md">
+            <div className="lg:hidden mb-8">
+              <Link to="/" className="flex items-center gap-2">
+                <div className="bg-gold grid h-9 w-9 place-items-center rounded-full">
+                  <span className="font-display text-primary-foreground font-bold">A</span>
+                </div>
+                <span className="font-display text-lg">Visão Arautos</span>
+              </Link>
+            </div>
+
+            <div className="border-border/60 bg-card/70 rounded-2xl border p-8 backdrop-blur-xl shadow-elegant">
+              <p className="text-primary text-xs tracking-[0.3em] uppercase">
+                {isRegister ? "Criar conta" : "Entrar"}
+              </p>
+              <h1 className="font-display mt-3 text-3xl">
+                {isRegister ? "Comece sua jornada" : "Bem-vindo de volta"}
+              </h1>
+
+              <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+                {isRegister && (
+                  <Field label="Nome completo" name="name" type="text" />
+                )}
+                <Field label="Email" name="email" type="email" />
+                <Field label="Senha" name="password" type="password" />
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-gold text-primary-foreground w-full rounded-full py-3.5 text-sm font-medium shadow-gold transition disabled:opacity-60"
+                >
+                  {loading
+                    ? "Aguarde..."
+                    : isRegister
+                      ? "Criar minha conta"
+                      : "Entrar"}
+                </button>
+              </form>
+
+              <p className="text-muted-foreground mt-6 text-center text-sm">
+                {isRegister ? "Já tem uma conta? " : "Novo por aqui? "}
+                <Link
+                  to="/auth"
+                  search={{ mode: isRegister ? "login" : "register" }}
+                  className="text-primary"
+                >
+                  {isRegister ? "Entrar" : "Criar conta"}
+                </Link>
+              </p>
+            </div>
+
+            <p className="text-muted-foreground mt-6 text-center text-xs">
+              Ao continuar, você concorda com os princípios do movimento.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  name,
+  type,
+}: {
+  label: string;
+  name: string;
+  type: string;
+}) {
+  return (
+    <label className="block">
+      <span className="text-muted-foreground mb-2 block text-xs tracking-widest uppercase">
+        {label}
+      </span>
+      <input
+        name={name}
+        type={type}
+        className="border-border bg-background/60 focus:border-gold focus:ring-primary/20 w-full rounded-lg border px-4 py-3 text-sm outline-none focus:ring-2"
+      />
+    </label>
+  );
+}
