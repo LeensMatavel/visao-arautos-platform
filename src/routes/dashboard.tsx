@@ -46,17 +46,17 @@ function DashboardPage() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:py-14">
+      <main id="conteudo" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:py-14">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:flex sm:justify-between">
           <div className="min-w-0">
             <p className="text-primary text-xs tracking-[0.3em] uppercase">
-              Dashboard
+              Painel
             </p>
             <h1 className="font-display mt-2 truncate text-3xl sm:text-4xl">
               Shalom, {user.name}
             </h1>
             <p className="text-muted-foreground mt-1 text-sm">
-              Continue caminhando na Palavra e no Espírito.
+              Continua a caminhar na Palavra e no Espírito.
             </p>
           </div>
           <button
@@ -75,7 +75,7 @@ function DashboardPage() {
           <StatCard icon={Flame} label="Progresso geral" value={`${stats.pct}%`} />
           <StatCard icon={BookOpen} label="Cursos iniciados" value={String(stats.enrolled)} />
           <StatCard icon={Sparkles} label="Aulas concluídas" value={String(stats.done)} />
-          <StatCard icon={Users} label="Comunidade" value="Ativa" />
+          <StatCard icon={Users} label="Comunidade" value="Activa" />
         </div>
 
         <div className="mt-12 grid gap-10 lg:grid-cols-3">

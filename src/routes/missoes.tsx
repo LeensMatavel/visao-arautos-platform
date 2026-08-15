@@ -16,9 +16,9 @@ export const Route = createFileRoute("/missoes")({
 
 const projects = [
   {
-    region: "Norte do Brasil",
-    title: "Ribeirinhos do Amazonas",
-    text: "Evangelismo, discipulado e apoio social a comunidades ribeirinhas.",
+    region: "Moçambique",
+    title: "Comunidades rurais do Zambeze",
+    text: "Evangelismo, discipulado e apoio social em comunidades rurais.",
     goal: 78,
   },
   {
@@ -36,7 +36,7 @@ const projects = [
   {
     region: "Europa",
     title: "Reavivamento nas cidades",
-    text: "Plantação de comunidades em capitais pós-cristãs.",
+    text: "Plantação de comunidades em cidades pós-cristãs.",
     goal: 25,
   },
 ];

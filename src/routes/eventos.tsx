@@ -15,10 +15,10 @@ export const Route = createFileRoute("/eventos")({
 });
 
 const events = [
-  { title: "Vigília do Despertar", date: "Sábado · 22h", city: "São Paulo, SP", tag: "Vigília" },
-  { title: "Conferência Arautos 2025", date: "12–14 dezembro", city: "Belo Horizonte, MG", tag: "Conferência" },
+  { title: "Vigília do Despertar", date: "Sábado · 22h", city: "Maputo, Moçambique", tag: "Vigília" },
+  { title: "Conferência Arautos", date: "12–14 de Dezembro", city: "Beira, Moçambique", tag: "Conferência" },
   { title: "Culto Missionário", date: "Domingo · 19h", city: "Online", tag: "Missões" },
-  { title: "Retiro de Formação", date: "18–20 janeiro", city: "Serra da Mantiqueira", tag: "Retiro" },
+  { title: "Retiro de Formação", date: "18–20 de Janeiro", city: "Nampula, Moçambique", tag: "Retiro" },
 ];
 
 function EventosPage() {
@@ -46,7 +46,7 @@ function EventosPage() {
                 <p className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {e.city}</p>
               </div>
               <button className="bg-gold text-primary-foreground mt-6 rounded-full px-5 py-2 text-xs font-medium">
-                Inscrever-se
+                Quero participar
               </button>
             </div>
           ))}

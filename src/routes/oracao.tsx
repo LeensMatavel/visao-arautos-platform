@@ -10,7 +10,7 @@ export const Route = createFileRoute("/oracao")({
   head: () => ({
     meta: [
       { title: "Rede de Oração — Visão Arautos" },
-      { name: "description", content: "Compartilhe pedidos e interceda pela comunidade Arautos." },
+      { name: "description", content: "Partilhe pedidos e interceda pela comunidade Arautos." },
     ],
   }),
   component: OracaoPage,
@@ -21,7 +21,7 @@ type Prayer = { id: string; name: string; text: string; prayed: number };
 const seed: Prayer[] = [
   { id: "1", name: "Família Souza", text: "Cura para nossa filha e paz em nosso lar.", prayed: 42 },
   { id: "2", name: "Isaque", text: "Direção sobre o campo missionário na Ásia.", prayed: 27 },
-  { id: "3", name: "Igreja em Belém", text: "Avivamento e novos discípulos nesta estação.", prayed: 61 },
+  { id: "3", name: "Igreja na Beira", text: "Avivamento e novos discípulos nesta estação.", prayed: 61 },
 ];
 
 function OracaoPage() {
@@ -30,7 +30,7 @@ function OracaoPage() {
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
-    const name = String(form.get("name") || "Anônimo");
+    const name = String(form.get("name") || "Anónimo");
     const text = String(form.get("text") || "");
     if (!text) return;
     setPrayers((p) => [
@@ -38,7 +38,7 @@ function OracaoPage() {
       ...p,
     ]);
     (e.currentTarget as HTMLFormElement).reset();
-    toast.success("Pedido compartilhado. Estamos orando com você.");
+    toast.success("Pedido partilhado. Estamos a orar consigo.");
   }
 
   const prayFor = (id: string) =>
@@ -84,17 +84,18 @@ function OracaoPage() {
         </div>
 
         <aside className="border-border bg-card h-fit rounded-2xl border p-6 md:sticky md:top-24">
-          <h3 className="font-display text-lg">Compartilhe um pedido</h3>
+          <h3 className="font-display text-lg">Partilhe um pedido</h3>
           <form onSubmit={submit} className="mt-4 space-y-3">
             <input
               name="name"
-              placeholder="Seu nome (ou anônimo)"
+              aria-label="O seu nome" placeholder="O seu nome (ou anónimo)"
               className="border-border bg-background/60 focus:border-gold w-full rounded-lg border px-4 py-3 text-sm outline-none"
             />
             <textarea
               name="text"
               rows={5}
-              placeholder="Como podemos orar por você?"
+              aria-label="Pedido de oração"
+              placeholder="Como podemos orar por si?"
               className="border-border bg-background/60 focus:border-gold w-full rounded-lg border px-4 py-3 text-sm outline-none"
             />
             <button className="bg-gold text-primary-foreground inline-flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-medium">

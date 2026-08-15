@@ -84,7 +84,7 @@ function AuthPage() {
                 {isRegister ? "Criar conta" : "Entrar"}
               </p>
               <h1 className="font-display mt-3 text-3xl">
-                {isRegister ? "Comece sua jornada" : "Bem-vindo de volta"}
+                {isRegister ? "Comece a sua jornada" : "Bem-vindo de volta"}
               </h1>
 
               <form onSubmit={handleSubmit} className="mt-8 space-y-4">
@@ -92,7 +92,7 @@ function AuthPage() {
                   <Field label="Nome completo" name="name" type="text" />
                 )}
                 <Field label="Email" name="email" type="email" />
-                <Field label="Senha" name="password" type="password" />
+                <Field label="Palavra-passe" name="password" type="password" />
 
                 <button
                   type="submit"
@@ -108,7 +108,7 @@ function AuthPage() {
               </form>
 
               <p className="text-muted-foreground mt-6 text-center text-sm">
-                {isRegister ? "Já tem uma conta? " : "Novo por aqui? "}
+                {isRegister ? "Já tem conta? " : "Novo por aqui? "}
                 <Link
                   to="/auth"
                   search={{ mode: isRegister ? "login" : "register" }}
@@ -120,7 +120,7 @@ function AuthPage() {
             </div>
 
             <p className="text-muted-foreground mt-6 text-center text-xs">
-              Ao continuar, você concorda com os princípios do movimento.
+              Ao continuar, concorda com os princípios do movimento.
             </p>
           </div>
         </div>

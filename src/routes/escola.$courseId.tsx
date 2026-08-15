@@ -161,7 +161,7 @@ function CoursePage() {
                 <div>
                   <p className="font-display text-lg">Material em PDF</p>
                   <p className="text-muted-foreground text-xs">
-                    Baixe para estudar offline
+                    Descarregue para estudar offline
                   </p>
                 </div>
               </div>
@@ -184,12 +184,13 @@ function CoursePage() {
               <textarea
                 value={notes}
                 onChange={(e) => saveNotes(e.target.value)}
-                placeholder="Escreva o que o Senhor te falou nesta aula..."
+                placeholder="Escreva o que o Senhor lhe falou nesta aula…"
                 rows={6}
+                aria-label="Minhas anotações"
                 className="border-border bg-background/60 focus:border-gold mt-4 w-full rounded-lg border p-4 text-sm outline-none"
               />
               <p className="text-muted-foreground mt-2 text-xs">
-                Suas anotações ficam salvas neste dispositivo.
+                As suas anotações ficam guardadas neste dispositivo.
               </p>
             </div>
 
@@ -203,7 +204,7 @@ function CoursePage() {
               </div>
               <div className="mt-6 space-y-5">
                 {[
-                  { n: "Ana", t: "Que aula profunda! O ponto sobre contexto histórico mudou minha leitura de Romanos." },
+                  { n: "Ana", t: "Que aula profunda! O ponto sobre contexto histórico mudou a minha leitura de Romanos." },
                   { n: "Lucas", t: "Alguém tem indicação de livros complementares?" },
                 ].map((c) => (
                   <div key={c.n} className="flex gap-3">
@@ -220,14 +221,14 @@ function CoursePage() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  toast.success("Comentário enviado à moderação.");
+                  toast.success("Comentário enviado para moderação.");
                   (e.currentTarget as HTMLFormElement).reset();
                 }}
                 className="mt-6 flex gap-2"
               >
                 <input
                   name="comment"
-                  placeholder="Deixe um comentário..."
+                  aria-label="Comentário" placeholder="Deixe um comentário…"
                   className="border-border bg-background/60 focus:border-gold flex-1 rounded-full border px-5 py-2.5 text-sm outline-none"
                 />
                 <button className="bg-gold text-primary-foreground rounded-full px-5 py-2.5 text-xs font-medium">
