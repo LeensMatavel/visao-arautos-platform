@@ -164,7 +164,7 @@ function DashboardPage() {
             </SidePanel>
           </aside>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
