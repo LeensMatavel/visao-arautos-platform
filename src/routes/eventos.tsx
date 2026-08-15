@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Calendar, MapPin } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const Route = createFileRoute("/eventos")({
   head: () => ({
@@ -14,18 +15,20 @@ export const Route = createFileRoute("/eventos")({
 });
 
 const events = [
-  { title: "Vigília do Despertar", date: "Sábado · 22h", city: "São Paulo, SP", tag: "Vigília" },
-  { title: "Conferência Arautos 2025", date: "12–14 dezembro", city: "Belo Horizonte, MG", tag: "Conferência" },
+  { title: "Vigília do Despertar", date: "Sábado · 22h", city: "Maputo, Moçambique", tag: "Vigília" },
+  { title: "Conferência Arautos", date: "12–14 de Dezembro", city: "Beira, Moçambique", tag: "Conferência" },
   { title: "Culto Missionário", date: "Domingo · 19h", city: "Online", tag: "Missões" },
-  { title: "Retiro de Formação", date: "18–20 janeiro", city: "Serra da Mantiqueira", tag: "Retiro" },
+  { title: "Retiro de Formação", date: "18–20 de Janeiro", city: "Nampula, Moçambique", tag: "Retiro" },
 ];
 
 function EventosPage() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <main id="conteudo">
       <section className="bg-hero border-b border-border/60">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-32">
+          <Breadcrumbs items={[{ label: "Início", to: "/" }, { label: "Eventos" }]} />
           <p className="text-primary text-xs tracking-[0.3em] uppercase">Eventos</p>
           <h1 className="font-display mt-6 text-5xl leading-[1.05] sm:text-6xl">
             Encontros para <span className="text-gold-gradient">despertar</span> a Igreja.
@@ -43,12 +46,13 @@ function EventosPage() {
                 <p className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {e.city}</p>
               </div>
               <button className="bg-gold text-primary-foreground mt-6 rounded-full px-5 py-2 text-xs font-medium">
-                Inscrever-se
+                Quero participar
               </button>
             </div>
           ))}
         </div>
       </section>
+      </main>
       <SiteFooter />
     </div>
   );

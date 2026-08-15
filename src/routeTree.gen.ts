@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as OracaoRouteImport } from './routes/oracao'
 import { Route as MissoesRouteImport } from './routes/missoes'
 import { Route as EventosRouteImport } from './routes/eventos'
@@ -18,8 +19,14 @@ import { Route as ComunidadeRouteImport } from './routes/comunidade'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EscolaIndexRouteImport } from './routes/escola.index'
 import { Route as EscolaCourseIdRouteImport } from './routes/escola.$courseId'
 
+const SobreRoute = SobreRouteImport.update({
+  id: '/sobre',
+  path: '/sobre',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OracaoRoute = OracaoRouteImport.update({
   id: '/oracao',
   path: '/oracao',
@@ -65,6 +72,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EscolaIndexRoute = EscolaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EscolaRoute,
+} as any)
 const EscolaCourseIdRoute = EscolaCourseIdRouteImport.update({
   id: '/$courseId',
   path: '/$courseId',
@@ -81,7 +93,9 @@ export interface FileRoutesByFullPath {
   '/eventos': typeof EventosRoute
   '/missoes': typeof MissoesRoute
   '/oracao': typeof OracaoRoute
+  '/sobre': typeof SobreRoute
   '/escola/$courseId': typeof EscolaCourseIdRoute
+  '/escola/': typeof EscolaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -89,11 +103,12 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRoute
   '/comunidade': typeof ComunidadeRoute
   '/dashboard': typeof DashboardRoute
-  '/escola': typeof EscolaRouteWithChildren
   '/eventos': typeof EventosRoute
   '/missoes': typeof MissoesRoute
   '/oracao': typeof OracaoRoute
+  '/sobre': typeof SobreRoute
   '/escola/$courseId': typeof EscolaCourseIdRoute
+  '/escola': typeof EscolaIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -106,7 +121,9 @@ export interface FileRoutesById {
   '/eventos': typeof EventosRoute
   '/missoes': typeof MissoesRoute
   '/oracao': typeof OracaoRoute
+  '/sobre': typeof SobreRoute
   '/escola/$courseId': typeof EscolaCourseIdRoute
+  '/escola/': typeof EscolaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,7 +137,9 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/missoes'
     | '/oracao'
+    | '/sobre'
     | '/escola/$courseId'
+    | '/escola/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -128,11 +147,12 @@ export interface FileRouteTypes {
     | '/blog'
     | '/comunidade'
     | '/dashboard'
-    | '/escola'
     | '/eventos'
     | '/missoes'
     | '/oracao'
+    | '/sobre'
     | '/escola/$courseId'
+    | '/escola'
   id:
     | '__root__'
     | '/'
@@ -144,7 +164,9 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/missoes'
     | '/oracao'
+    | '/sobre'
     | '/escola/$courseId'
+    | '/escola/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -157,10 +179,18 @@ export interface RootRouteChildren {
   EventosRoute: typeof EventosRoute
   MissoesRoute: typeof MissoesRoute
   OracaoRoute: typeof OracaoRoute
+  SobreRoute: typeof SobreRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sobre': {
+      id: '/sobre'
+      path: '/sobre'
+      fullPath: '/sobre'
+      preLoaderRoute: typeof SobreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/oracao': {
       id: '/oracao'
       path: '/oracao'
@@ -224,6 +254,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/escola/': {
+      id: '/escola/'
+      path: '/'
+      fullPath: '/escola/'
+      preLoaderRoute: typeof EscolaIndexRouteImport
+      parentRoute: typeof EscolaRoute
+    }
     '/escola/$courseId': {
       id: '/escola/$courseId'
       path: '/$courseId'
@@ -236,10 +273,12 @@ declare module '@tanstack/react-router' {
 
 interface EscolaRouteChildren {
   EscolaCourseIdRoute: typeof EscolaCourseIdRoute
+  EscolaIndexRoute: typeof EscolaIndexRoute
 }
 
 const EscolaRouteChildren: EscolaRouteChildren = {
   EscolaCourseIdRoute: EscolaCourseIdRoute,
+  EscolaIndexRoute: EscolaIndexRoute,
 }
 
 const EscolaRouteWithChildren =
@@ -255,7 +294,18 @@ const rootRouteChildren: RootRouteChildren = {
   EventosRoute: EventosRoute,
   MissoesRoute: MissoesRoute,
   OracaoRoute: OracaoRoute,
+  SobreRoute: SobreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

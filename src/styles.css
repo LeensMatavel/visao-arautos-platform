@@ -157,3 +157,11 @@
   );
   height: 1px;
 }
+
+@utility focus-ring {
+  outline: none;
+  &:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+}

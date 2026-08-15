@@ -13,6 +13,16 @@ import { SiteFooter } from "@/components/site-footer";
 import { cycles } from "@/lib/courses";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Visão Arautos — Despertando uma geração para Cristo" },
+      { name: "description", content: "Movimento cristão de formação bíblica, despertar espiritual, discipulado, evangelismo e missões, com espiritualidade pentecostal e equilíbrio bíblico." },
+      { property: "og:title", content: "Visão Arautos — Despertando uma geração para Cristo" },
+      { property: "og:description", content: "Movimento cristão de formação bíblica, despertar espiritual, discipulado, evangelismo e missões, com espiritualidade pentecostal e equilíbrio bíblico." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: LandingPage,
 });
 
@@ -53,6 +63,7 @@ function LandingPage() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <main id="conteudo">
 
       {/* HERO */}
       <section className="bg-hero relative overflow-hidden">
@@ -61,16 +72,16 @@ function LandingPage() {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="border-gold/40 text-primary inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs tracking-[0.25em] uppercase">
               <span className="bg-primary h-1.5 w-1.5 rounded-full" />
-              Movimento Cristão
+              Despertando uma geração para Cristo
             </div>
             <h1 className="font-display mt-6 text-5xl leading-[1.05] sm:text-6xl lg:text-7xl">
               Um chamado ao <span className="text-gold-gradient">despertar</span>,
               à Palavra e à missão.
             </h1>
             <p className="text-muted-foreground mt-6 max-w-xl text-lg leading-relaxed">
-              Visão Arautos é um movimento de formação bíblica, discipulado e
-              envio missionário, com espiritualidade pentecostal ancorada no
-              equilíbrio das Escrituras.
+              Movimento cristão evangélico, pentecostal e interdenominacional de
+              formação bíblica, despertar espiritual, discipulado, evangelismo
+              e missões.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
               <Link
@@ -146,7 +157,7 @@ function LandingPage() {
             </h2>
             <p className="text-muted-foreground mt-4 leading-relaxed">
               Sonhamos com uma igreja em avivamento sadio: profunda nas
-              Escrituras, viva no Espírito, unida no amor e ativa na missão de
+              Escrituras, viva no Espírito, unida no amor e activa na missão de
               Cristo até os confins da terra.
             </p>
           </div>
@@ -263,6 +274,7 @@ function LandingPage() {
         </div>
       </section>
 
+      </main>
       <SiteFooter />
     </div>
   );
