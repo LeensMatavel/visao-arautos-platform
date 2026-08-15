@@ -1,5 +1,33 @@
 import { Link } from "@tanstack/react-router";
 
+const columns = [
+  {
+    title: "Movimento",
+    links: [
+      { to: "/sobre", label: "Sobre o movimento" },
+      { to: "/sobre", label: "Missão e visão", hash: "missao-visao" },
+      { to: "/sobre", label: "Frentes de ministério", hash: "frentes" },
+      { to: "/missoes", label: "Projetos missionários" },
+    ],
+  },
+  {
+    title: "Formação",
+    links: [
+      { to: "/escola", label: "Escola Arautos" },
+      { to: "/blog", label: "Blog" },
+      { to: "/eventos", label: "Eventos" },
+    ],
+  },
+  {
+    title: "Comunidade",
+    links: [
+      { to: "/comunidade", label: "Grupos e fórum" },
+      { to: "/oracao", label: "Pedidos de oração" },
+      { to: "/auth", label: "Entrar na plataforma" },
+    ],
+  },
+];
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-border/60 bg-background">
@@ -14,53 +42,43 @@ export function SiteFooter() {
               </div>
               <span className="font-display text-lg">Visão Arautos</span>
             </div>
+            <p className="text-primary mt-4 text-xs tracking-[0.25em] uppercase">
+              Despertando uma geração para Cristo
+            </p>
             <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
-              Um movimento cristão de formação bíblica, despertar espiritual,
-              discipulado e missões.
+              Movimento cristão evangélico, pentecostal e interdenominacional,
+              dedicado à formação bíblica, ao despertar espiritual, ao
+              discipulado, ao evangelismo e às missões.
             </p>
           </div>
 
-          <div>
-            <h4 className="font-display text-primary mb-3 text-sm tracking-wider uppercase">
-              Movimento
-            </h4>
-            <ul className="text-muted-foreground space-y-2 text-sm">
-              <li><Link to="/" hash="missao" className="hover:text-foreground">Missão</Link></li>
-              <li><Link to="/" hash="visao" className="hover:text-foreground">Visão</Link></li>
-              <li><Link to="/" hash="frentes" className="hover:text-foreground">Frentes</Link></li>
-              <li><Link to="/missoes" className="hover:text-foreground">Projetos missionários</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-display text-primary mb-3 text-sm tracking-wider uppercase">
-              Formação
-            </h4>
-            <ul className="text-muted-foreground space-y-2 text-sm">
-              <li><Link to="/escola" className="hover:text-foreground">Escola Arautos</Link></li>
-              <li><Link to="/blog" className="hover:text-foreground">Blog</Link></li>
-              <li><Link to="/eventos" className="hover:text-foreground">Eventos</Link></li>
-              <li><Link to="/oracao" className="hover:text-foreground">Rede de oração</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-display text-primary mb-3 text-sm tracking-wider uppercase">
-              Comunidade
-            </h4>
-            <ul className="text-muted-foreground space-y-2 text-sm">
-              <li><Link to="/comunidade" className="hover:text-foreground">Fórum</Link></li>
-              <li><Link to="/oracao" className="hover:text-foreground">Pedidos de oração</Link></li>
-              <li><Link to="/auth" className="hover:text-foreground">Entrar</Link></li>
-            </ul>
-          </div>
+          {columns.map((col) => (
+            <nav key={col.title} aria-label={col.title}>
+              <h2 className="font-display text-primary mb-3 text-sm tracking-wider uppercase">
+                {col.title}
+              </h2>
+              <ul className="text-muted-foreground space-y-2 text-sm">
+                {col.links.map((l) => (
+                  <li key={`${l.to}-${l.label}`}>
+                    <Link
+                      to={l.to}
+                      hash={"hash" in l ? (l.hash as string) : undefined}
+                      className="hover:text-foreground focus-ring rounded-sm transition-colors"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
         </div>
 
         <div className="my-12 hairline" />
 
         <div className="text-muted-foreground flex flex-col items-center justify-between gap-4 text-xs sm:flex-row">
-          <p>© {new Date().getFullYear()} Visão Arautos. Ide por todo o mundo.</p>
-          <p className="tracking-widest uppercase">Fé · Verdade · Missão</p>
+          <p>© {new Date().getFullYear()} Visão Arautos. Todos os direitos reservados.</p>
+          <p className="tracking-widest uppercase">Palavra · Espírito · Missão</p>
         </div>
       </div>
     </footer>
