@@ -9,6 +9,17 @@ const search = z.object({
 });
 
 export const Route = createFileRoute("/auth")({
+  head: () => ({
+    meta: [
+      { title: "Entrar ou criar conta — Visão Arautos" },
+      { name: "description", content: "Aceda à plataforma Visão Arautos para acompanhar a sua formação na Escola Arautos, a comunidade e os pedidos de oração." },
+      { property: "og:title", content: "Entrar ou criar conta — Visão Arautos" },
+      { property: "og:description", content: "Aceda à plataforma Visão Arautos para acompanhar a sua formação na Escola Arautos, a comunidade e os pedidos de oração." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   validateSearch: search,
   component: AuthPage,
 });

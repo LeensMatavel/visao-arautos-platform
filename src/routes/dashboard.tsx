@@ -15,6 +15,17 @@ import { allCourses, cycles } from "@/lib/courses";
 import { SiteHeader } from "@/components/site-header";
 
 export const Route = createFileRoute("/dashboard")({
+  head: () => ({
+    meta: [
+      { title: "O meu painel — Visão Arautos" },
+      { name: "description", content: "Acompanhe o seu progresso na Escola Arautos, os cursos iniciados e a vida da comunidade." },
+      { property: "og:title", content: "O meu painel — Visão Arautos" },
+      { property: "og:description", content: "Acompanhe o seu progresso na Escola Arautos, os cursos iniciados e a vida da comunidade." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   component: DashboardPage,
 });
 

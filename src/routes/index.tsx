@@ -13,6 +13,16 @@ import { SiteFooter } from "@/components/site-footer";
 import { cycles } from "@/lib/courses";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Visão Arautos — Despertando uma geração para Cristo" },
+      { name: "description", content: "Movimento cristão de formação bíblica, despertar espiritual, discipulado, evangelismo e missões, com espiritualidade pentecostal e equilíbrio bíblico." },
+      { property: "og:title", content: "Visão Arautos — Despertando uma geração para Cristo" },
+      { property: "og:description", content: "Movimento cristão de formação bíblica, despertar espiritual, discipulado, evangelismo e missões, com espiritualidade pentecostal e equilíbrio bíblico." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: LandingPage,
 });
 
