@@ -1,14 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import {
-  Play,
-  FileDown,
-  Check,
-  ChevronLeft,
-  MessageCircle,
-  StickyNote,
-} from "lucide-react";
+import { FileDown, MessageCircle, StickyNote, BookOpen } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { EmptyState } from "@/components/states";
 import {
   findCourse,
   findCycleForCourse,
@@ -22,8 +18,30 @@ export const Route = createFileRoute("/escola/$courseId")({
   loader: ({ params }) => {
     const course = findCourse(params.courseId);
     if (!course) throw notFound();
-    return { courseId: params.courseId };
+    return { courseId: params.courseId, title: course.title, description: course.description };
   },
+  head: ({ loaderData }) => {
+    if (!loaderData) {
+      return {
+        meta: [
+          { title: "Curso indisponível — Escola Arautos" },
+          { name: "robots", content: "noindex" },
+        ],
+      };
+    }
+    const title = `${loaderData.title} — Escola Arautos`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: loaderData.description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: loaderData.description },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
+  notFoundComponent: CourseNotFound,
   component: CoursePage,
 });
 
@@ -59,17 +77,20 @@ function CoursePage() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <main id="conteudo">
 
       {/* Cover banner */}
       <section className="relative overflow-hidden border-b border-border/60">
         <div className="bg-hero absolute inset-0" />
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
-          <Link
-            to="/escola"
-            className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs tracking-widest uppercase"
-          >
-            <ChevronLeft className="h-4 w-4" /> Escola Arautos
-          </Link>
+          <Breadcrumbs
+            items={[
+              { label: "Início", to: "/" },
+              { label: "Escola Arautos", to: "/escola" },
+              ...(cycle ? [{ label: cycle.subtitle, to: "/escola", hash: cycle.id }] : []),
+              { label: course.title },
+            ]}
+          />
           {cycle && (
             <p className="text-primary mt-6 text-xs tracking-[0.3em] uppercase">
               {cycle.title}
@@ -260,6 +281,34 @@ function CoursePage() {
           </aside>
         </div>
       </section>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
+
+function CourseNotFound() {
+  return (
+    <div className="min-h-screen">
+      <SiteHeader />
+      <main id="conteudo" className="mx-auto max-w-3xl px-4 py-24 sm:px-6">
+        <Breadcrumbs
+          items={[
+            { label: "Início", to: "/" },
+            { label: "Escola Arautos", to: "/escola" },
+            { label: "Curso não encontrado" },
+          ]}
+        />
+        <div className="mt-10">
+          <EmptyState
+            icon={<BookOpen className="h-5 w-5" aria-hidden="true" />}
+            title="Curso não encontrado"
+            description="Este curso não existe ou foi movido. Consulte os cinco ciclos da Escola Arautos para encontrar o percurso certo."
+            action={{ label: "Ver todos os cursos", to: "/escola" }}
+          />
+        </div>
+      </main>
+      <SiteFooter />
     </div>
   );
 }
