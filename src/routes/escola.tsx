@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { cycles } from "@/lib/courses";
 
 export const Route = createFileRoute("/escola")({
@@ -27,9 +28,11 @@ function EscolaPage() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <main id="conteudo">
 
       <section className="bg-hero relative border-b border-border/60">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-32">
+          <Breadcrumbs items={[{ label: "Início", to: "/" }, { label: "Escola Arautos" }]} />
           <p className="text-primary text-xs tracking-[0.3em] uppercase">
             Escola Arautos
           </p>
@@ -92,6 +95,7 @@ function EscolaPage() {
         </div>
       </section>
 
+      </main>
       <SiteFooter />
     </div>
   );

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -47,8 +48,10 @@ function BlogPage() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <main id="conteudo">
       <section className="bg-hero border-b border-border/60">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-32">
+          <Breadcrumbs items={[{ label: "Início", to: "/" }, { label: "Blog" }]} />
           <p className="text-primary text-xs tracking-[0.3em] uppercase">Blog</p>
           <h1 className="font-display mt-6 text-5xl leading-[1.05] sm:text-6xl">
             Reflexões, ensinos e <span className="text-gold-gradient">testemunhos</span>.
@@ -75,6 +78,7 @@ function BlogPage() {
           ))}
         </div>
       </section>
+      </main>
       <SiteFooter />
     </div>
   );

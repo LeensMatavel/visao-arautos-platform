@@ -3,6 +3,7 @@ import { useState } from "react";
 import { HeartHandshake, Send } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/oracao")({
@@ -48,8 +49,10 @@ function OracaoPage() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <main id="conteudo">
       <section className="bg-hero border-b border-border/60">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-32">
+          <Breadcrumbs items={[{ label: "Início", to: "/" }, { label: "Pedidos de oração" }]} />
           <p className="text-primary text-xs tracking-[0.3em] uppercase">Rede de Oração</p>
           <h1 className="font-display mt-6 text-5xl leading-[1.05] sm:text-6xl">
             "Orai <span className="text-gold-gradient">uns pelos outros</span>."
@@ -100,6 +103,7 @@ function OracaoPage() {
           </form>
         </aside>
       </section>
+      </main>
       <SiteFooter />
     </div>
   );

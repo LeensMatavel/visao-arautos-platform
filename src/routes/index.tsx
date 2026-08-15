@@ -53,6 +53,7 @@ function LandingPage() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <main id="conteudo">
 
       {/* HERO */}
       <section className="bg-hero relative overflow-hidden">
@@ -263,6 +264,7 @@ function LandingPage() {
         </div>
       </section>
 
+      </main>
       <SiteFooter />
     </div>
   );

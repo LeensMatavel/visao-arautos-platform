@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Globe2, MapPin } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const Route = createFileRoute("/missoes")({
   head: () => ({
@@ -44,8 +45,10 @@ function MissoesPage() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <main id="conteudo">
       <section className="bg-hero border-b border-border/60">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:py-32">
+          <Breadcrumbs items={[{ label: "Início", to: "/" }, { label: "Missões" }]} />
           <p className="text-primary text-xs tracking-[0.3em] uppercase">Missões</p>
           <h1 className="font-display mt-6 text-5xl leading-[1.05] sm:text-6xl">
             Até os <span className="text-gold-gradient">confins</span> da terra.
@@ -84,6 +87,7 @@ function MissoesPage() {
           ))}
         </div>
       </section>
+      </main>
       <SiteFooter />
     </div>
   );
