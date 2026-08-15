@@ -19,6 +19,7 @@ import { Route as ComunidadeRouteImport } from './routes/comunidade'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EscolaIndexRouteImport } from './routes/escola.index'
 import { Route as EscolaCourseIdRouteImport } from './routes/escola.$courseId'
 
 const SobreRoute = SobreRouteImport.update({
@@ -71,6 +72,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EscolaIndexRoute = EscolaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EscolaRoute,
+} as any)
 const EscolaCourseIdRoute = EscolaCourseIdRouteImport.update({
   id: '/$courseId',
   path: '/$courseId',
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/oracao': typeof OracaoRoute
   '/sobre': typeof SobreRoute
   '/escola/$courseId': typeof EscolaCourseIdRoute
+  '/escola/': typeof EscolaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -96,12 +103,12 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRoute
   '/comunidade': typeof ComunidadeRoute
   '/dashboard': typeof DashboardRoute
-  '/escola': typeof EscolaRouteWithChildren
   '/eventos': typeof EventosRoute
   '/missoes': typeof MissoesRoute
   '/oracao': typeof OracaoRoute
   '/sobre': typeof SobreRoute
   '/escola/$courseId': typeof EscolaCourseIdRoute
+  '/escola': typeof EscolaIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,6 +123,7 @@ export interface FileRoutesById {
   '/oracao': typeof OracaoRoute
   '/sobre': typeof SobreRoute
   '/escola/$courseId': typeof EscolaCourseIdRoute
+  '/escola/': typeof EscolaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,6 +139,7 @@ export interface FileRouteTypes {
     | '/oracao'
     | '/sobre'
     | '/escola/$courseId'
+    | '/escola/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -138,12 +147,12 @@ export interface FileRouteTypes {
     | '/blog'
     | '/comunidade'
     | '/dashboard'
-    | '/escola'
     | '/eventos'
     | '/missoes'
     | '/oracao'
     | '/sobre'
     | '/escola/$courseId'
+    | '/escola'
   id:
     | '__root__'
     | '/'
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/oracao'
     | '/sobre'
     | '/escola/$courseId'
+    | '/escola/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -244,6 +254,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/escola/': {
+      id: '/escola/'
+      path: '/'
+      fullPath: '/escola/'
+      preLoaderRoute: typeof EscolaIndexRouteImport
+      parentRoute: typeof EscolaRoute
+    }
     '/escola/$courseId': {
       id: '/escola/$courseId'
       path: '/$courseId'
@@ -256,10 +273,12 @@ declare module '@tanstack/react-router' {
 
 interface EscolaRouteChildren {
   EscolaCourseIdRoute: typeof EscolaCourseIdRoute
+  EscolaIndexRoute: typeof EscolaIndexRoute
 }
 
 const EscolaRouteChildren: EscolaRouteChildren = {
   EscolaCourseIdRoute: EscolaCourseIdRoute,
+  EscolaIndexRoute: EscolaIndexRoute,
 }
 
 const EscolaRouteWithChildren =
