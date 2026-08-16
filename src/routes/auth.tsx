@@ -28,7 +28,7 @@ function AuthPage() {
   const { mode = "login" } = Route.useSearch();
   const isRegister = mode === "register";
   const navigate = useNavigate();
-  const { login, register } = useAuth();
+  const { login, register, loginWithGoogle } = useAuth();
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -43,12 +43,29 @@ function AuthPage() {
     }
     setLoading(true);
     try {
-      if (isRegister) await register(name, email, password);
-      else await login(email, password);
-      toast.success(isRegister ? "Conta criada. Bem-vindo, arauto!" : "Bem-vindo de volta.");
+      if (isRegister) {
+        await register(name, email, password);
+        toast.success("Conta criada. Verifique o seu email para confirmar.");
+      } else {
+        await login(email, password);
+        toast.success("Bem-vindo de volta.");
+      }
       navigate({ to: "/dashboard" });
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Não foi possível autenticar.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleGoogle() {
+    setLoading(true);
+    try {
+      await loginWithGoogle();
     } catch {
-      toast.error("Não foi possível autenticar.");
+      toast.error("Não foi possível entrar com o Google.");
     } finally {
       setLoading(false);
     }
@@ -117,6 +134,23 @@ function AuthPage() {
                       : "Entrar"}
                 </button>
               </form>
+
+              <div className="my-6 flex items-center gap-4">
+                <span className="bg-border h-px flex-1" />
+                <span className="text-muted-foreground text-[10px] tracking-[0.3em] uppercase">
+                  ou
+                </span>
+                <span className="bg-border h-px flex-1" />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleGoogle}
+                disabled={loading}
+                className="border-border hover:border-gold focus-ring w-full rounded-full border py-3.5 text-sm font-medium transition disabled:opacity-60"
+              >
+                Continuar com o Google
+              </button>
 
               <p className="text-muted-foreground mt-6 text-center text-sm">
                 {isRegister ? "Já tem conta? " : "Novo por aqui? "}

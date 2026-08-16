@@ -10,7 +10,8 @@ import {
   ChevronRight,
   Flame,
 } from "lucide-react";
-import { useAuth, getProgress } from "@/lib/auth-context";
+import { useAuth } from "@/lib/auth-context";
+import { fetchProgress, syncLocalProgress } from "@/lib/progress";
 import { allCourses, cycles } from "@/lib/courses";
 import { SiteHeader } from "@/components/site-header";
 
@@ -39,7 +40,15 @@ function DashboardPage() {
   }, [loading, user, navigate]);
 
   useEffect(() => {
-    setProgress(getProgress());
+    let active = true;
+    (async () => {
+      if (user) await syncLocalProgress(user.id);
+      const map = await fetchProgress();
+      if (active) setProgress(map);
+    })();
+    return () => {
+      active = false;
+    };
   }, [user]);
 
   const stats = useMemo(() => {
