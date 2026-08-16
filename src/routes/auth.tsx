@@ -135,6 +135,23 @@ function AuthPage() {
                 </button>
               </form>
 
+              <div className="my-6 flex items-center gap-4">
+                <span className="bg-border h-px flex-1" />
+                <span className="text-muted-foreground text-[10px] tracking-[0.3em] uppercase">
+                  ou
+                </span>
+                <span className="bg-border h-px flex-1" />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleGoogle}
+                disabled={loading}
+                className="border-border hover:border-gold focus-ring w-full rounded-full border py-3.5 text-sm font-medium transition disabled:opacity-60"
+              >
+                Continuar com o Google
+              </button>
+
               <p className="text-muted-foreground mt-6 text-center text-sm">
                 {isRegister ? "Já tem conta? " : "Novo por aqui? "}
                 <Link
