@@ -40,7 +40,15 @@ function DashboardPage() {
   }, [loading, user, navigate]);
 
   useEffect(() => {
-    setProgress(getProgress());
+    let active = true;
+    (async () => {
+      if (user) await syncLocalProgress(user.id);
+      const map = await fetchProgress();
+      if (active) setProgress(map);
+    })();
+    return () => {
+      active = false;
+    };
   }, [user]);
 
   const stats = useMemo(() => {

@@ -55,14 +55,20 @@ function CoursePage() {
   const [notes, setNotes] = useState("");
 
   useEffect(() => {
-    setCompleted(getProgress()[courseId] || []);
+    let active = true;
+    fetchProgress().then((map) => {
+      if (active) setCompleted(map[courseId] || []);
+    });
     setNotes(localStorage.getItem(`arautos.notes.${courseId}`) || "");
+    return () => {
+      active = false;
+    };
   }, [courseId]);
 
   const pct = Math.round((completed.length / course.lessons.length) * 100);
 
-  const toggle = () => {
-    const next = toggleLessonComplete(courseId, activeLesson.id);
+  const toggle = async () => {
+    const next = await toggleLesson(courseId, activeLesson.id, completed);
     setCompleted(next);
     toast.success(
       next.includes(activeLesson.id) ? "Aula concluída" : "Aula reaberta",
