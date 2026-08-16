@@ -10,7 +10,7 @@ import {
   findCycleForCourse,
   type Lesson,
 } from "@/lib/courses";
-import { getProgress, toggleLessonComplete } from "@/lib/auth-context";
+import { fetchProgress, toggleLesson } from "@/lib/progress";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 

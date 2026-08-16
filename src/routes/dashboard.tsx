@@ -10,7 +10,8 @@ import {
   ChevronRight,
   Flame,
 } from "lucide-react";
-import { useAuth, getProgress } from "@/lib/auth-context";
+import { useAuth } from "@/lib/auth-context";
+import { fetchProgress, syncLocalProgress } from "@/lib/progress";
 import { allCourses, cycles } from "@/lib/courses";
 import { SiteHeader } from "@/components/site-header";
 
