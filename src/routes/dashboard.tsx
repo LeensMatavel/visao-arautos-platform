@@ -11,6 +11,7 @@ import {
   Flame,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { useRoles, roleLabel } from "@/lib/roles";
 import { fetchProgress, syncLocalProgress } from "@/lib/progress";
 import { allCourses, cycles } from "@/lib/courses";
 import { SiteHeader } from "@/components/site-header";
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/dashboard")({
 
 function DashboardPage() {
   const { user, loading, logout } = useAuth();
+  const { primary, isStaff, loading: rolesLoading } = useRoles();
   const navigate = useNavigate();
   const [progress, setProgress] = useState<Record<string, string[]>>({});
 
@@ -89,6 +91,41 @@ function DashboardPage() {
             <LogOut className="h-4 w-4" /> Sair
           </button>
         </div>
+
+        {/* Perfil */}
+        <section className="border-border bg-card mt-8 rounded-2xl border p-6">
+          <h2 className="font-display text-sm tracking-widest uppercase">
+            O meu perfil
+          </h2>
+          <dl className="mt-4 grid gap-4 sm:grid-cols-4">
+            <div>
+              <dt className="text-muted-foreground text-xs tracking-widest uppercase">Nome</dt>
+              <dd className="mt-1 text-sm">{user.name}</dd>
+            </div>
+            <div className="min-w-0">
+              <dt className="text-muted-foreground text-xs tracking-widest uppercase">Email</dt>
+              <dd className="mt-1 truncate text-sm">{user.email}</dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground text-xs tracking-widest uppercase">Papel</dt>
+              <dd className="mt-1 text-sm">
+                {rolesLoading ? "A verificar…" : roleLabel[primary]}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground text-xs tracking-widest uppercase">Sessão</dt>
+              <dd className="mt-1 text-sm">Activa neste dispositivo</dd>
+            </div>
+          </dl>
+          {isStaff && (
+            <Link
+              to="/admin"
+              className="border-gold/50 text-primary hover:bg-primary/10 mt-6 inline-flex rounded-full border px-5 py-2 text-xs"
+            >
+              Abrir área de administração
+            </Link>
+          )}
+        </section>
 
         {/* Stats */}
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

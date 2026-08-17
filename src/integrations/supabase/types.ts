@@ -38,6 +38,218 @@ export type Database = {
         }
         Relationships: []
       }
+      courses: {
+        Row: {
+          cover_url: string | null
+          created_at: string
+          cycle_id: string
+          description: string
+          id: string
+          is_published: boolean
+          order_index: number
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string
+          cycle_id: string
+          description?: string
+          id?: string
+          is_published?: boolean
+          order_index?: number
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string
+          cycle_id?: string
+          description?: string
+          id?: string
+          is_published?: boolean
+          order_index?: number
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courses_cycle_id_fkey"
+            columns: ["cycle_id"]
+            isOneToOne: false
+            referencedRelation: "cycles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cycles: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          is_published: boolean
+          order_index: number
+          slug: string
+          subtitle: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_published?: boolean
+          order_index?: number
+          slug: string
+          subtitle?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_published?: boolean
+          order_index?: number
+          slug?: string
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      lesson_comments: {
+        Row: {
+          body: string
+          created_at: string
+          display_name: string
+          id: string
+          lesson_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          display_name?: string
+          id?: string
+          lesson_id: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          display_name?: string
+          id?: string
+          lesson_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_comments_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_materials: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          lesson_id: string
+          order_index: number
+          title: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind?: string
+          lesson_id: string
+          order_index?: number
+          title: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          lesson_id?: string
+          order_index?: number
+          title?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_materials_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          course_id: string
+          created_at: string
+          duration_label: string | null
+          id: string
+          is_published: boolean
+          order_index: number
+          slug: string
+          summary: string
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          duration_label?: string | null
+          id?: string
+          is_published?: boolean
+          order_index?: number
+          slug: string
+          summary?: string
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          duration_label?: string | null
+          id?: string
+          is_published?: boolean
+          order_index?: number
+          slug?: string
+          summary?: string
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       prayer_intercessions: {
         Row: {
           created_at: string
