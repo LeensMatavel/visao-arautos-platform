@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { useRoles } from "@/lib/roles";
 import { cn } from "@/lib/utils";
 
 type NavLeaf = { to: string; label: string; description?: string };
@@ -108,6 +109,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user } = useAuth();
+  const { isStaff } = useRoles();
 
   useEffect(() => {
     setOpen(false);
@@ -172,12 +174,22 @@ export function SiteHeader() {
 
           <div className="hidden items-center gap-3 lg:flex">
             {user ? (
-              <Link
-                to="/dashboard"
-                className="bg-gold text-primary-foreground focus-ring rounded-full px-5 py-2 text-sm font-medium shadow-gold transition-transform hover:scale-[1.02]"
-              >
-                Painel
-              </Link>
+              <>
+                {isStaff && (
+                  <Link
+                    to="/admin"
+                    className="border-gold/50 text-primary hover:bg-primary/10 focus-ring rounded-full border px-4 py-2 text-sm transition-colors"
+                  >
+                    Administração
+                  </Link>
+                )}
+                <Link
+                  to="/dashboard"
+                  className="bg-gold text-primary-foreground focus-ring rounded-full px-5 py-2 text-sm font-medium shadow-gold transition-transform hover:scale-[1.02]"
+                >
+                  Painel
+                </Link>
+              </>
             ) : (
               <>
                 <Link
