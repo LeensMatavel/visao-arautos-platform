@@ -11,8 +11,8 @@ import {
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { cycles } from "@/lib/courses";
-import logoAsset from "@/assets/visao-arautos-logo.jpg.asset.json";
-import heroAsset from "@/assets/hero-despertar.jpg.asset.json";
+import heroAsset from "@/assets/hero-oracao.jpg.asset.json";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
