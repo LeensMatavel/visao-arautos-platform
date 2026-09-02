@@ -11,6 +11,8 @@ import {
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { cycles } from "@/lib/courses";
+import logoAsset from "@/assets/visao-arautos-logo.jpg.asset.json";
+import heroAsset from "@/assets/hero-despertar.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -66,10 +68,25 @@ function LandingPage() {
       <main id="conteudo">
 
       {/* HERO */}
-      <section className="bg-hero relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:radial-gradient(circle_at_center,oklch(0.82_0.13_85/0.15)_1px,transparent_1px)] [background-size:32px_32px]" />
+      <section className="relative overflow-hidden">
+        {/* Background photograph */}
+        <div className="absolute inset-0">
+          <img
+            src={heroAsset.url}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/75 to-navy-deep/95" />
+          <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:radial-gradient(circle_at_center,oklch(0.82_0.13_85/0.15)_1px,transparent_1px)] [background-size:32px_32px]" />
+        </div>
+
         <div className="relative mx-auto grid max-w-7xl gap-12 px-4 pt-20 pb-28 sm:px-6 lg:grid-cols-2 lg:pt-32 lg:pb-40">
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <img
+              src={logoAsset.url}
+              alt="Visão Arautos"
+              className="mb-6 h-auto w-44 object-contain shadow-elegant sm:w-60"
+            />
             <div className="border-gold/40 text-primary inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs tracking-[0.25em] uppercase">
               <span className="bg-primary h-1.5 w-1.5 rounded-full" />
               Despertando uma geração para Cristo
