@@ -77,8 +77,9 @@ function LandingPage() {
             className="h-full w-full object-cover object-center"
           />
           {/* Overlay: navy/black, mais escuro à esquerda */}
-          <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/70 to-navy-deep/45" />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-ink/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/55 to-navy-deep/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/15 to-ink/45" />
+
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-20 sm:px-6 sm:pt-24 sm:pb-28 lg:pt-32 lg:pb-36">
