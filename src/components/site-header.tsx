@@ -127,23 +127,25 @@ export function SiteHeader() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
           <Link
             to="/"
-            className="focus-ring flex items-center gap-2 rounded-sm"
+            className="focus-ring flex min-w-0 items-center gap-2.5 rounded-sm"
             aria-label="Visão Arautos — página inicial"
           >
-            <div className="bg-gold grid h-8 w-8 place-items-center rounded-full shadow-gold">
-              <span className="font-display text-primary-foreground text-lg font-bold">
-                A
-              </span>
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="font-display text-base font-semibold tracking-wide">
+            <img
+              src={logoAsset.url}
+              alt=""
+              aria-hidden="true"
+              className="h-9 w-auto shrink-0 object-contain sm:h-10"
+            />
+            <div className="flex min-w-0 flex-col leading-tight">
+              <span className="font-display truncate text-base font-semibold tracking-[0.12em] uppercase sm:text-lg">
                 Visão Arautos
               </span>
-              <span className="text-muted-foreground text-[10px] tracking-[0.2em] uppercase">
+              <span className="text-muted-foreground hidden text-[10px] tracking-[0.2em] uppercase sm:block">
                 Despertando uma geração
               </span>
             </div>
           </Link>
+
 
           <nav aria-label="Navegação principal" className="hidden items-center gap-7 lg:flex">
             {nav.map((n) =>
