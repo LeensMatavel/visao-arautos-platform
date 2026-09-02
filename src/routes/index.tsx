@@ -85,7 +85,7 @@ function LandingPage() {
             <img
               src={logoAsset.url}
               alt="Visão Arautos"
-              className="mb-6 h-auto w-40 rounded-lg object-contain shadow-elegant sm:w-52"
+              className="mb-6 h-auto w-44 object-contain shadow-elegant sm:w-60"
             />
             <div className="border-gold/40 text-primary inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs tracking-[0.25em] uppercase">
               <span className="bg-primary h-1.5 w-1.5 rounded-full" />
