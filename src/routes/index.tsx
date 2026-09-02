@@ -68,56 +68,56 @@ function LandingPage() {
       <main id="conteudo">
 
       {/* HERO */}
-      <section className="relative overflow-hidden">
+      <section className="relative isolate overflow-hidden">
         {/* Background photograph */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 -z-10">
           <img
             src={heroAsset.url}
-            alt=""
-            className="h-full w-full object-cover"
+            alt="Jovens reunidos em oração de mãos dadas ao amanhecer"
+            className="h-full w-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/75 to-navy-deep/95" />
-          <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:radial-gradient(circle_at_center,oklch(0.82_0.13_85/0.15)_1px,transparent_1px)] [background-size:32px_32px]" />
+          {/* Overlay: navy/black, mais escuro à esquerda */}
+          <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/70 to-navy-deep/45" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-ink/60" />
         </div>
 
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 pt-20 pb-28 sm:px-6 lg:grid-cols-2 lg:pt-32 lg:pb-40">
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <img
-              src={logoAsset.url}
-              alt="Visão Arautos"
-              className="mb-6 h-auto w-44 object-contain shadow-elegant sm:w-60"
-            />
-            <div className="border-gold/40 text-primary inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs tracking-[0.25em] uppercase">
+        <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-20 sm:px-6 sm:pt-24 sm:pb-28 lg:pt-32 lg:pb-36">
+          <div className="max-w-2xl">
+            <div className="border-gold/40 text-primary inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[10px] tracking-[0.25em] uppercase sm:text-xs">
               <span className="bg-primary h-1.5 w-1.5 rounded-full" />
-              Despertando uma geração para Cristo
+              Visão Arautos
             </div>
-            <h1 className="font-display mt-6 text-5xl leading-[1.05] sm:text-6xl lg:text-7xl">
-              Um chamado ao <span className="text-gold-gradient">despertar</span>,
-              à Palavra e à missão.
+            <h1 className="font-display mt-6 text-4xl leading-[1.05] tracking-tight uppercase sm:text-6xl lg:text-7xl">
+              Despertando<br />
+              <span className="text-gold-gradient">uma geração</span><br />
+              para Cristo
             </h1>
-            <p className="text-muted-foreground mt-6 max-w-xl text-lg leading-relaxed">
-              Movimento cristão evangélico, pentecostal e interdenominacional de
-              formação bíblica, despertar espiritual, discipulado, evangelismo
-              e missões.
+            <div className="mt-7 h-px w-28 bg-gradient-to-r from-primary to-transparent" />
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-foreground/85 sm:text-lg">
+              Um chamado ao despertar, à Palavra e à missão.
             </p>
-            <div className="mt-10 flex flex-wrap gap-3">
+            <p className="text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed sm:text-base">
+              Movimento cristão evangélico comprometido com o Evangelho, a
+              formação de uma geração e a missão de Cristo.
+            </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
-                to="/escola"
-                className="bg-gold text-primary-foreground inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium shadow-gold transition-transform hover:scale-[1.02]"
+                to="/sobre"
+                className="bg-gold text-primary-foreground inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium tracking-wide uppercase shadow-gold transition-transform hover:scale-[1.02]"
               >
-                Entrar na Escola Arautos
+                Conheça a visão
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/auth"
                 search={{ mode: "register" }}
-                className="border-border text-foreground hover:border-gold hover:text-primary inline-flex items-center rounded-full border px-7 py-3.5 text-sm transition-colors"
+                className="border-gold text-primary hover:bg-primary/10 inline-flex items-center justify-center rounded-full border px-7 py-3.5 text-sm tracking-wide uppercase transition-colors"
               >
-                Criar minha conta
+                Entrar na comunidade
               </Link>
             </div>
 
-            <div className="mt-16 grid max-w-md grid-cols-3 gap-6">
+            <div className="mt-14 grid max-w-md grid-cols-3 gap-6">
               {[
                 { n: "5", l: "Ciclos" },
                 { n: "22+", l: "Cursos" },
@@ -132,26 +132,9 @@ function LandingPage() {
               ))}
             </div>
           </div>
-
-          <div className="relative hidden lg:block">
-            <div className="from-primary/20 relative aspect-square overflow-hidden rounded-full bg-gradient-to-br to-transparent">
-              <div className="absolute inset-6 rounded-full border border-primary/30" />
-              <div className="absolute inset-16 rounded-full border border-primary/20" />
-              <div className="absolute inset-28 rounded-full border border-primary/10" />
-              <div className="absolute inset-0 grid place-items-center">
-                <div className="text-center">
-                  <p className="text-primary font-display text-[10rem] leading-none">A</p>
-                  <p className="text-muted-foreground mt-4 tracking-[0.3em] uppercase">
-                    Arautos
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-gold/20 absolute -top-10 -right-10 h-40 w-40 rounded-full blur-3xl" />
-            <div className="bg-primary/10 absolute -bottom-10 -left-10 h-60 w-60 rounded-full blur-3xl" />
-          </div>
         </div>
       </section>
+
 
       {/* MISSÃO / VISÃO */}
       <section id="missao" className="border-t border-border/60 py-24">
