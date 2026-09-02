@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useRoles } from "@/lib/roles";
 import { cn } from "@/lib/utils";
+import logoAsset from "@/assets/logo-arautos.png.asset.json";
+
 
 type NavLeaf = { to: string; label: string; description?: string };
 type NavItem = NavLeaf | { label: string; children: NavLeaf[] };
