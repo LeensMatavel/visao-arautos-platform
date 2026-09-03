@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { ChevronDown, ChevronRight, Pencil, Plus, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { LoadingState } from "@/components/states";
+import { useRoles } from "@/lib/roles";
 
 export const Route = createFileRoute("/admin/cursos")({
   component: AdminCourses,
@@ -106,6 +107,7 @@ function slugify(value: string) {
 }
 
 function AdminCourses() {
+  const { isAdmin } = useRoles();
   const [cycles, setCycles] = useState<Cycle[] | null>(null);
   const [error, setError] = useState(false);
   const [openCycles, setOpenCycles] = useState<Record<string, boolean>>({});
@@ -172,20 +174,22 @@ function AdminCourses() {
           estiver pronto. Enquanto uma aula não tiver ligação de vídeo, mostra
           o estado “vídeo ainda não disponível”.
         </p>
-        <button
-          onClick={() =>
-            setEditor({
-              table: "cycles",
-              fields: cycleFields,
-              row: null,
-              base: { order_index: sortedCycles.length + 1 },
-              label: "Novo ciclo",
-            })
-          }
-          className="border-gold/50 text-primary hover:bg-primary/10 focus-ring inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-xs transition-colors"
-        >
-          <Plus className="h-3.5 w-3.5" aria-hidden /> Novo ciclo
-        </button>
+        {isAdmin && (
+          <button
+            onClick={() =>
+              setEditor({
+                table: "cycles",
+                fields: cycleFields,
+                row: null,
+                base: { order_index: sortedCycles.length + 1 },
+                label: "Novo ciclo",
+              })
+            }
+            className="border-gold/50 text-primary hover:bg-primary/10 focus-ring inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-xs transition-colors"
+          >
+            <Plus className="h-3.5 w-3.5" aria-hidden /> Novo ciclo
+          </button>
+        )}
       </div>
 
       {sortedCycles.map((cy) => {
@@ -207,48 +211,52 @@ function AdminCourses() {
                   </span>
                 </span>
               </button>
-              <div className="flex items-center gap-3">
-                <PublishToggle
-                  checked={cy.is_published}
-                  label={`Publicar ciclo ${cy.title}`}
-                  onChange={(v) => togglePublished("cycles", cy.id, v)}
-                />
-                <IconButton
-                  label={`Editar ciclo ${cy.title}`}
-                  onClick={() =>
-                    setEditor({ table: "cycles", fields: cycleFields, row: cy as never, label: "Editar ciclo" })
-                  }
-                >
-                  <Pencil className="h-3.5 w-3.5" aria-hidden />
-                </IconButton>
-                <IconButton
-                  label={`Remover ciclo ${cy.title}`}
-                  danger
-                  onClick={() =>
-                    remove("cycles", cy.id, `Remover o ciclo “${cy.title}”? Só é possível se não tiver cursos associados.`)
-                  }
-                >
-                  <Trash2 className="h-3.5 w-3.5" aria-hidden />
-                </IconButton>
-              </div>
+              {isAdmin && (
+                <div className="flex items-center gap-3">
+                  <PublishToggle
+                    checked={cy.is_published}
+                    label={`Publicar ciclo ${cy.title}`}
+                    onChange={(v) => togglePublished("cycles", cy.id, v)}
+                  />
+                  <IconButton
+                    label={`Editar ciclo ${cy.title}`}
+                    onClick={() =>
+                      setEditor({ table: "cycles", fields: cycleFields, row: cy as never, label: "Editar ciclo" })
+                    }
+                  >
+                    <Pencil className="h-3.5 w-3.5" aria-hidden />
+                  </IconButton>
+                  <IconButton
+                    label={`Remover ciclo ${cy.title}`}
+                    danger
+                    onClick={() =>
+                      remove("cycles", cy.id, `Remover o ciclo “${cy.title}”? Só é possível se não tiver cursos associados.`)
+                    }
+                  >
+                    <Trash2 className="h-3.5 w-3.5" aria-hidden />
+                  </IconButton>
+                </div>
+              )}
             </div>
 
             {cycleOpen && (
               <div className="mt-5 space-y-3 border-t border-border/60 pt-5">
-                <button
-                  onClick={() =>
-                    setEditor({
-                      table: "courses",
-                      fields: courseFields,
-                      row: null,
-                      base: { cycle_id: cy.id, order_index: courses.length + 1 },
-                      label: `Novo curso em ${cy.title}`,
-                    })
-                  }
-                  className="border-border focus-ring text-muted-foreground hover:text-foreground inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs transition-colors"
-                >
-                  <Plus className="h-3.5 w-3.5" aria-hidden /> Novo curso
-                </button>
+                {isAdmin && (
+                  <button
+                    onClick={() =>
+                      setEditor({
+                        table: "courses",
+                        fields: courseFields,
+                        row: null,
+                        base: { cycle_id: cy.id, order_index: courses.length + 1 },
+                        label: `Novo curso em ${cy.title}`,
+                      })
+                    }
+                    className="border-border focus-ring text-muted-foreground hover:text-foreground inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs transition-colors"
+                  >
+                    <Plus className="h-3.5 w-3.5" aria-hidden /> Novo curso
+                  </button>
+                )}
 
                 {courses.length === 0 && (
                   <p className="text-muted-foreground text-xs">Este ciclo ainda não tem cursos.</p>
@@ -273,48 +281,52 @@ function AdminCourses() {
                             </span>
                           </span>
                         </button>
-                        <div className="flex items-center gap-3">
-                          <PublishToggle
-                            checked={co.is_published}
-                            label={`Publicar curso ${co.title}`}
-                            onChange={(v) => togglePublished("courses", co.id, v)}
-                          />
-                          <IconButton
-                            label={`Editar curso ${co.title}`}
-                            onClick={() =>
-                              setEditor({ table: "courses", fields: courseFields, row: co as never, label: "Editar curso" })
-                            }
-                          >
-                            <Pencil className="h-3.5 w-3.5" aria-hidden />
-                          </IconButton>
-                          <IconButton
-                            label={`Remover curso ${co.title}`}
-                            danger
-                            onClick={() =>
-                              remove("courses", co.id, `Remover o curso “${co.title}”? Só é possível se não tiver aulas associadas.`)
-                            }
-                          >
-                            <Trash2 className="h-3.5 w-3.5" aria-hidden />
-                          </IconButton>
-                        </div>
+                        {isAdmin && (
+                          <div className="flex items-center gap-3">
+                            <PublishToggle
+                              checked={co.is_published}
+                              label={`Publicar curso ${co.title}`}
+                              onChange={(v) => togglePublished("courses", co.id, v)}
+                            />
+                            <IconButton
+                              label={`Editar curso ${co.title}`}
+                              onClick={() =>
+                                setEditor({ table: "courses", fields: courseFields, row: co as never, label: "Editar curso" })
+                              }
+                            >
+                              <Pencil className="h-3.5 w-3.5" aria-hidden />
+                            </IconButton>
+                            <IconButton
+                              label={`Remover curso ${co.title}`}
+                              danger
+                              onClick={() =>
+                                remove("courses", co.id, `Remover o curso “${co.title}”? Só é possível se não tiver aulas associadas.`)
+                              }
+                            >
+                              <Trash2 className="h-3.5 w-3.5" aria-hidden />
+                            </IconButton>
+                          </div>
+                        )}
                       </div>
 
                       {courseOpen && (
                         <div className="mt-5 space-y-3 border-t border-border/60 pt-5">
-                          <button
-                            onClick={() =>
-                              setEditor({
-                                table: "lessons",
-                                fields: lessonFields,
-                                row: null,
-                                base: { course_id: co.id, order_index: lessons.length + 1 },
-                                label: `Nova aula em ${co.title}`,
-                              })
-                            }
-                            className="border-border focus-ring text-muted-foreground hover:text-foreground inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs transition-colors"
-                          >
-                            <Plus className="h-3.5 w-3.5" aria-hidden /> Nova aula
-                          </button>
+                          {isAdmin && (
+                            <button
+                              onClick={() =>
+                                setEditor({
+                                  table: "lessons",
+                                  fields: lessonFields,
+                                  row: null,
+                                  base: { course_id: co.id, order_index: lessons.length + 1 },
+                                  label: `Nova aula em ${co.title}`,
+                                })
+                              }
+                              className="border-border focus-ring text-muted-foreground hover:text-foreground inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs transition-colors"
+                            >
+                              <Plus className="h-3.5 w-3.5" aria-hidden /> Nova aula
+                            </button>
+                          )}
 
                           {lessons.length === 0 && (
                             <p className="text-muted-foreground text-xs">Este curso ainda não tem aulas.</p>
@@ -346,30 +358,32 @@ function AdminCourses() {
                                       </span>
                                     </span>
                                   </button>
-                                  <div className="flex items-center gap-3">
-                                    <PublishToggle
-                                      checked={l.is_published}
-                                      label={`Publicar aula ${l.title}`}
-                                      onChange={(v) => togglePublished("lessons", l.id, v)}
-                                    />
-                                    <IconButton
-                                      label={`Editar aula ${l.title}`}
-                                      onClick={() =>
-                                        setEditor({ table: "lessons", fields: lessonFields, row: l as never, label: "Editar aula" })
-                                      }
-                                    >
-                                      <Pencil className="h-3.5 w-3.5" aria-hidden />
-                                    </IconButton>
-                                    <IconButton
-                                      label={`Remover aula ${l.title}`}
-                                      danger
-                                      onClick={() =>
-                                        remove("lessons", l.id, `Remover a aula “${l.title}”? Esta acção não pode ser anulada.`)
-                                      }
-                                    >
-                                      <Trash2 className="h-3.5 w-3.5" aria-hidden />
-                                    </IconButton>
-                                  </div>
+                                  {isAdmin && (
+                                    <div className="flex items-center gap-3">
+                                      <PublishToggle
+                                        checked={l.is_published}
+                                        label={`Publicar aula ${l.title}`}
+                                        onChange={(v) => togglePublished("lessons", l.id, v)}
+                                      />
+                                      <IconButton
+                                        label={`Editar aula ${l.title}`}
+                                        onClick={() =>
+                                          setEditor({ table: "lessons", fields: lessonFields, row: l as never, label: "Editar aula" })
+                                        }
+                                      >
+                                        <Pencil className="h-3.5 w-3.5" aria-hidden />
+                                      </IconButton>
+                                      <IconButton
+                                        label={`Remover aula ${l.title}`}
+                                        danger
+                                        onClick={() =>
+                                          remove("lessons", l.id, `Remover a aula “${l.title}”? Esta acção não pode ser anulada.`)
+                                        }
+                                      >
+                                        <Trash2 className="h-3.5 w-3.5" aria-hidden />
+                                      </IconButton>
+                                    </div>
+                                  )}
                                 </div>
 
                                 {lessonOpen && (
@@ -378,24 +392,26 @@ function AdminCourses() {
                                       <p className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
                                         Materiais
                                       </p>
-                                      <button
-                                        onClick={() =>
-                                          setEditor({
-                                            table: "lesson_materials",
-                                            fields: materialFields,
-                                            row: null,
-                                            base: {
-                                              lesson_id: l.id,
-                                              kind: "pdf",
-                                              order_index: materials.length + 1,
-                                            },
-                                            label: `Novo material em ${l.title}`,
-                                          })
-                                        }
-                                        className="border-gold/50 text-primary focus-ring inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs"
-                                      >
-                                        <Plus className="h-3 w-3" aria-hidden /> Adicionar
-                                      </button>
+                                      {isAdmin && (
+                                        <button
+                                          onClick={() =>
+                                            setEditor({
+                                              table: "lesson_materials",
+                                              fields: materialFields,
+                                              row: null,
+                                              base: {
+                                                lesson_id: l.id,
+                                                kind: "pdf",
+                                                order_index: materials.length + 1,
+                                              },
+                                              label: `Novo material em ${l.title}`,
+                                            })
+                                          }
+                                          className="border-gold/50 text-primary focus-ring inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs"
+                                        >
+                                          <Plus className="h-3 w-3" aria-hidden /> Adicionar
+                                        </button>
+                                      )}
                                     </div>
                                     {materials.length === 0 && (
                                       <p className="text-muted-foreground text-xs">
@@ -414,30 +430,32 @@ function AdminCourses() {
                                               {m.kind} · {m.url}
                                             </span>
                                           </span>
-                                          <span className="flex items-center gap-2">
-                                            <IconButton
-                                              label={`Editar material ${m.title}`}
-                                              onClick={() =>
-                                                setEditor({
-                                                  table: "lesson_materials",
-                                                  fields: materialFields,
-                                                  row: m as never,
-                                                  label: "Editar material",
-                                                })
-                                              }
-                                            >
-                                              <Pencil className="h-3.5 w-3.5" aria-hidden />
-                                            </IconButton>
-                                            <IconButton
-                                              label={`Remover material ${m.title}`}
-                                              danger
-                                              onClick={() =>
-                                                remove("lesson_materials", m.id, `Remover o material “${m.title}”?`)
-                                              }
-                                            >
-                                              <Trash2 className="h-3.5 w-3.5" aria-hidden />
-                                            </IconButton>
-                                          </span>
+                                          {isAdmin && (
+                                            <span className="flex items-center gap-2">
+                                              <IconButton
+                                                label={`Editar material ${m.title}`}
+                                                onClick={() =>
+                                                  setEditor({
+                                                    table: "lesson_materials",
+                                                    fields: materialFields,
+                                                    row: m as never,
+                                                    label: "Editar material",
+                                                  })
+                                                }
+                                              >
+                                                <Pencil className="h-3.5 w-3.5" aria-hidden />
+                                              </IconButton>
+                                              <IconButton
+                                                label={`Remover material ${m.title}`}
+                                                danger
+                                                onClick={() =>
+                                                  remove("lesson_materials", m.id, `Remover o material “${m.title}”?`)
+                                                }
+                                              >
+                                                <Trash2 className="h-3.5 w-3.5" aria-hidden />
+                                              </IconButton>
+                                            </span>
+                                          )}
                                         </li>
                                       ))}
                                     </ul>
