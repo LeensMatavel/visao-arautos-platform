@@ -40,6 +40,7 @@ export type Database = {
       }
       courses: {
         Row: {
+          archived_at: string | null
           cover_url: string | null
           created_at: string
           cycle_id: string
@@ -52,6 +53,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          archived_at?: string | null
           cover_url?: string | null
           created_at?: string
           cycle_id: string
@@ -64,6 +66,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          archived_at?: string | null
           cover_url?: string | null
           created_at?: string
           cycle_id?: string
@@ -87,6 +90,7 @@ export type Database = {
       }
       cycles: {
         Row: {
+          archived_at: string | null
           created_at: string
           description: string
           id: string
@@ -98,6 +102,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          archived_at?: string | null
           created_at?: string
           description?: string
           id?: string
@@ -109,6 +114,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          archived_at?: string | null
           created_at?: string
           description?: string
           id?: string
@@ -164,6 +170,7 @@ export type Database = {
       }
       lesson_materials: {
         Row: {
+          archived_at: string | null
           created_at: string
           id: string
           kind: string
@@ -173,6 +180,7 @@ export type Database = {
           url: string
         }
         Insert: {
+          archived_at?: string | null
           created_at?: string
           id?: string
           kind?: string
@@ -182,6 +190,7 @@ export type Database = {
           url: string
         }
         Update: {
+          archived_at?: string | null
           created_at?: string
           id?: string
           kind?: string
@@ -202,6 +211,7 @@ export type Database = {
       }
       lessons: {
         Row: {
+          archived_at: string | null
           course_id: string
           created_at: string
           duration_label: string | null
@@ -215,6 +225,7 @@ export type Database = {
           video_url: string | null
         }
         Insert: {
+          archived_at?: string | null
           course_id: string
           created_at?: string
           duration_label?: string | null
@@ -228,6 +239,7 @@ export type Database = {
           video_url?: string | null
         }
         Update: {
+          archived_at?: string | null
           course_id?: string
           created_at?: string
           duration_label?: string | null
