@@ -70,7 +70,14 @@ async function collectTree(admin: Admin, table: CurriculumTable, id: string) {
 
 async function countIn(admin: Admin, table: string, column: string, ids: string[]) {
   if (!ids.length) return 0;
-  const { count } = await admin
+  const client = admin as unknown as {
+    from: (t: string) => {
+      select: (c: string, o: { count: "exact"; head: true }) => {
+        in: (col: string, v: string[]) => Promise<{ count: number | null }>;
+      };
+    };
+  };
+  const { count } = await client
     .from(table)
     .select("id", { count: "exact", head: true })
     .in(column, ids);
