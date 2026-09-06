@@ -28,6 +28,7 @@ export const Route = createFileRoute("/admin/cursos")({
 
 type Material = {
   id: string;
+  archived_at: string | null;
   lesson_id: string;
   title: string;
   kind: string;
@@ -36,6 +37,7 @@ type Material = {
 };
 type Lesson = {
   id: string;
+  archived_at: string | null;
   course_id: string;
   slug: string;
   title: string;
@@ -48,6 +50,7 @@ type Lesson = {
 };
 type Course = {
   id: string;
+  archived_at: string | null;
   cycle_id: string;
   slug: string;
   title: string;
@@ -58,6 +61,7 @@ type Course = {
 };
 type Cycle = {
   id: string;
+  archived_at: string | null;
   slug: string;
   title: string;
   subtitle: string;
@@ -135,7 +139,7 @@ function AdminCourses() {
     const { data, error: err } = await supabase
       .from("cycles")
       .select(
-        "id, slug, title, subtitle, description, order_index, is_published, courses(id, cycle_id, slug, title, description, order_index, is_published, lessons(id, course_id, slug, title, summary, duration_label, order_index, video_url, is_published, lesson_materials(id, lesson_id, title, kind, url, order_index)))",
+        "id, archived_at, slug, title, subtitle, description, order_index, is_published, courses(id, archived_at, cycle_id, slug, title, description, order_index, is_published, lessons(id, archived_at, course_id, slug, title, summary, duration_label, order_index, video_url, is_published, lesson_materials(id, archived_at, lesson_id, title, kind, url, order_index)))",
       )
       .order("order_index");
     setError(Boolean(err));
