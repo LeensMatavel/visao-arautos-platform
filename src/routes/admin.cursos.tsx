@@ -1,10 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { ChevronDown, ChevronRight, Pencil, Plus, Trash2 } from "lucide-react";
+import {
+  Archive,
+  ArchiveRestore,
+  ChevronDown,
+  ChevronRight,
+  Pencil,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { LoadingState } from "@/components/states";
 import { useRoles } from "@/lib/roles";
+import {
+  getImpact,
+  setArchived,
+  purgeItem,
+  type CurriculumTable,
+  type ImpactSummary,
+} from "@/lib/curriculum.functions";
 
 export const Route = createFileRoute("/admin/cursos")({
   component: AdminCourses,
