@@ -1,10 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { ChevronDown, ChevronRight, Pencil, Plus, Trash2 } from "lucide-react";
+import {
+  Archive,
+  ArchiveRestore,
+  ChevronDown,
+  ChevronRight,
+  Pencil,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { LoadingState } from "@/components/states";
 import { useRoles } from "@/lib/roles";
+import {
+  getImpact,
+  setArchived,
+  purgeItem,
+  type CurriculumTable,
+  type ImpactSummary,
+} from "@/lib/curriculum.functions";
 
 export const Route = createFileRoute("/admin/cursos")({
   component: AdminCourses,
@@ -12,6 +28,7 @@ export const Route = createFileRoute("/admin/cursos")({
 
 type Material = {
   id: string;
+  archived_at: string | null;
   lesson_id: string;
   title: string;
   kind: string;
@@ -20,6 +37,7 @@ type Material = {
 };
 type Lesson = {
   id: string;
+  archived_at: string | null;
   course_id: string;
   slug: string;
   title: string;
@@ -32,6 +50,7 @@ type Lesson = {
 };
 type Course = {
   id: string;
+  archived_at: string | null;
   cycle_id: string;
   slug: string;
   title: string;
@@ -42,6 +61,7 @@ type Course = {
 };
 type Cycle = {
   id: string;
+  archived_at: string | null;
   slug: string;
   title: string;
   subtitle: string;
@@ -114,12 +134,14 @@ function AdminCourses() {
   const [openCourses, setOpenCourses] = useState<Record<string, boolean>>({});
   const [openLessons, setOpenLessons] = useState<Record<string, boolean>>({});
   const [editor, setEditor] = useState<EditorTarget | null>(null);
+  const [purge, setPurge] = useState<{ table: CurriculumTable; id: string } | null>(null);
+  const archiveFn = useServerFn(setArchived);
 
   const load = useCallback(async () => {
     const { data, error: err } = await supabase
       .from("cycles")
       .select(
-        "id, slug, title, subtitle, description, order_index, is_published, courses(id, cycle_id, slug, title, description, order_index, is_published, lessons(id, course_id, slug, title, summary, duration_label, order_index, video_url, is_published, lesson_materials(id, lesson_id, title, kind, url, order_index)))",
+        "id, archived_at, slug, title, subtitle, description, order_index, is_published, courses(id, archived_at, cycle_id, slug, title, description, order_index, is_published, lessons(id, archived_at, course_id, slug, title, summary, duration_label, order_index, video_url, is_published, lesson_materials(id, archived_at, lesson_id, title, kind, url, order_index)))",
       )
       .order("order_index");
     setError(Boolean(err));
@@ -144,19 +166,18 @@ function AdminCourses() {
     void load();
   }
 
-  async function remove(
-    table: "cycles" | "courses" | "lessons" | "lesson_materials",
-    id: string,
-    warning: string,
-  ) {
-    if (!window.confirm(warning)) return;
-    const { error: err } = await supabase.from(table).delete().eq("id", id);
-    if (err)
-      return toast.error(
-        "Não foi possível remover. Verifique se ainda existem itens associados.",
+  async function archive(table: CurriculumTable, id: string, archived: boolean) {
+    try {
+      const res = await archiveFn({ data: { table, id, archived } });
+      toast.success(
+        archived
+          ? `Arquivado. ${res.affected} item(ns) deixaram de estar visíveis na Escola.`
+          : `Restaurado. ${res.affected} item(ns) voltaram a ficar visíveis.`,
       );
-    toast.success("Removido.");
-    void load();
+      void load();
+    } catch {
+      toast.error("Não foi possível concluir a operação.");
+    }
   }
 
   if (error)
@@ -208,6 +229,7 @@ function AdminCourses() {
                   <span className="font-display block truncate text-xl">{cy.title}</span>
                   <span className="text-muted-foreground block text-xs">
                     {courses.length} cursos · ordem {cy.order_index} · /{cy.slug}
+                    {cy.archived_at ? " · arquivado" : ""}
                   </span>
                 </span>
               </button>
@@ -226,15 +248,13 @@ function AdminCourses() {
                   >
                     <Pencil className="h-3.5 w-3.5" aria-hidden />
                   </IconButton>
-                  <IconButton
-                    label={`Remover ciclo ${cy.title}`}
-                    danger
-                    onClick={() =>
-                      remove("cycles", cy.id, `Remover o ciclo “${cy.title}”? Só é possível se não tiver cursos associados.`)
-                    }
-                  >
-                    <Trash2 className="h-3.5 w-3.5" aria-hidden />
-                  </IconButton>
+<ArchiveActions
+                    archived={Boolean(cy.archived_at)}
+                    noun="ciclo"
+                    title={cy.title}
+                    onArchive={(v) => archive("cycles", cy.id, v)}
+                    onPurge={() => setPurge({ table: "cycles", id: cy.id })}
+                  />
                 </div>
               )}
             </div>
@@ -278,6 +298,7 @@ function AdminCourses() {
                             <span className="font-display block truncate text-lg">{co.title}</span>
                             <span className="text-muted-foreground block text-xs">
                               {lessons.length} aulas · ordem {co.order_index} · /{co.slug}
+                              {co.archived_at ? " · arquivado" : ""}
                             </span>
                           </span>
                         </button>
@@ -296,15 +317,13 @@ function AdminCourses() {
                             >
                               <Pencil className="h-3.5 w-3.5" aria-hidden />
                             </IconButton>
-                            <IconButton
-                              label={`Remover curso ${co.title}`}
-                              danger
-                              onClick={() =>
-                                remove("courses", co.id, `Remover o curso “${co.title}”? Só é possível se não tiver aulas associadas.`)
-                              }
-                            >
-                              <Trash2 className="h-3.5 w-3.5" aria-hidden />
-                            </IconButton>
+<ArchiveActions
+                    archived={Boolean(co.archived_at)}
+                    noun="curso"
+                    title={co.title}
+                    onArchive={(v) => archive("courses", co.id, v)}
+                    onPurge={() => setPurge({ table: "courses", id: co.id })}
+                  />
                           </div>
                         )}
                       </div>
@@ -373,15 +392,13 @@ function AdminCourses() {
                                       >
                                         <Pencil className="h-3.5 w-3.5" aria-hidden />
                                       </IconButton>
-                                      <IconButton
-                                        label={`Remover aula ${l.title}`}
-                                        danger
-                                        onClick={() =>
-                                          remove("lessons", l.id, `Remover a aula “${l.title}”? Esta acção não pode ser anulada.`)
-                                        }
-                                      >
-                                        <Trash2 className="h-3.5 w-3.5" aria-hidden />
-                                      </IconButton>
+<ArchiveActions
+                    archived={Boolean(l.archived_at)}
+                    noun="aula"
+                    title={l.title}
+                    onArchive={(v) => archive("lessons", l.id, v)}
+                    onPurge={() => setPurge({ table: "lessons", id: l.id })}
+                  />
                                     </div>
                                   )}
                                 </div>
@@ -445,15 +462,13 @@ function AdminCourses() {
                                               >
                                                 <Pencil className="h-3.5 w-3.5" aria-hidden />
                                               </IconButton>
-                                              <IconButton
-                                                label={`Remover material ${m.title}`}
-                                                danger
-                                                onClick={() =>
-                                                  remove("lesson_materials", m.id, `Remover o material “${m.title}”?`)
-                                                }
-                                              >
-                                                <Trash2 className="h-3.5 w-3.5" aria-hidden />
-                                              </IconButton>
+<ArchiveActions
+                    archived={Boolean(m.archived_at)}
+                    noun="material"
+                    title={m.title}
+                    onArchive={(v) => archive("lesson_materials", m.id, v)}
+                    onPurge={() => setPurge({ table: "lesson_materials", id: m.id })}
+                  />
                                             </span>
                                           )}
                                         </li>
@@ -475,6 +490,17 @@ function AdminCourses() {
         );
       })}
 
+      {purge && (
+        <PurgeDialog
+          target={purge}
+          onClose={() => setPurge(null)}
+          onDone={() => {
+            setPurge(null);
+            void load();
+          }}
+        />
+      )}
+
       {editor && (
         <RecordDialog
           target={editor}
@@ -485,6 +511,142 @@ function AdminCourses() {
           }}
         />
       )}
+    </div>
+  );
+}
+
+function ArchiveActions({
+  archived,
+  noun,
+  title,
+  onArchive,
+  onPurge,
+}: {
+  archived: boolean;
+  noun: string;
+  title: string;
+  onArchive: (v: boolean) => void;
+  onPurge: () => void;
+}) {
+  return (
+    <>
+      <IconButton
+        label={archived ? `Restaurar ${noun} ${title}` : `Arquivar ${noun} ${title}`}
+        onClick={() => onArchive(!archived)}
+      >
+        {archived ? (
+          <ArchiveRestore className="h-3.5 w-3.5" aria-hidden />
+        ) : (
+          <Archive className="h-3.5 w-3.5" aria-hidden />
+        )}
+      </IconButton>
+      {archived && (
+        <IconButton label={`Eliminar definitivamente ${noun} ${title}`} danger onClick={onPurge}>
+          <Trash2 className="h-3.5 w-3.5" aria-hidden />
+        </IconButton>
+      )}
+    </>
+  );
+}
+
+function PurgeDialog({
+  target,
+  onClose,
+  onDone,
+}: {
+  target: { table: CurriculumTable; id: string };
+  onClose: () => void;
+  onDone: () => void;
+}) {
+  const impactFn = useServerFn(getImpact);
+  const purgeFn = useServerFn(purgeItem);
+  const [impact, setImpact] = useState<ImpactSummary | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [confirmTitle, setConfirmTitle] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    impactFn({ data: target })
+      .then((res) => alive && setImpact(res))
+      .catch(() => alive && setFailed(true));
+    return () => {
+      alive = false;
+    };
+  }, [impactFn, target]);
+
+  async function confirm() {
+    setBusy(true);
+    try {
+      const res = await purgeFn({ data: { ...target, confirmTitle } });
+      toast.success(`“${res.title}” eliminado definitivamente.`);
+      onDone();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Não foi possível eliminar.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div
+      className="bg-background/80 fixed inset-0 z-50 flex items-end justify-center overflow-y-auto p-4 backdrop-blur-sm sm:items-center"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Eliminar definitivamente"
+    >
+      <div className="border-destructive/40 bg-card w-full max-w-lg rounded-2xl border p-6 shadow-2xl">
+        <h2 className="font-display text-xl">Eliminar definitivamente</h2>
+        {failed && (
+          <p className="text-muted-foreground mt-4 text-sm">
+            Não foi possível calcular o impacto desta eliminação.
+          </p>
+        )}
+        {!impact && !failed && (
+          <p className="text-muted-foreground mt-4 text-sm">A calcular o impacto…</p>
+        )}
+        {impact && (
+          <>
+            <p className="text-muted-foreground mt-4 text-sm">
+              Esta acção é irreversível e remove “{impact.title}” e tudo o que depende dele:
+            </p>
+            <ul className="text-muted-foreground mt-3 space-y-1 text-sm">
+              <li>{impact.courses} cursos</li>
+              <li>{impact.lessons} aulas</li>
+              <li>{impact.materials} materiais</li>
+              <li>{impact.comments} comentários</li>
+              <li>{impact.progress} registos de progresso de alunos</li>
+            </ul>
+            <label className="mt-5 block">
+              <span className="text-muted-foreground mb-1.5 block text-xs">
+                Escreva o nome exacto para confirmar
+              </span>
+              <input
+                value={confirmTitle}
+                onChange={(e) => setConfirmTitle(e.target.value)}
+                className="border-border bg-background/60 focus:border-gold w-full rounded-lg border px-3 py-2 text-sm outline-none"
+              />
+            </label>
+          </>
+        )}
+        <div className="mt-6 flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="border-border focus-ring text-muted-foreground rounded-full border px-5 py-2 text-xs"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            disabled={busy || !impact || confirmTitle.trim() !== impact?.title.trim()}
+            onClick={confirm}
+            className="border-destructive/60 text-destructive hover:bg-destructive/10 focus-ring rounded-full border px-5 py-2 text-xs disabled:opacity-40"
+          >
+            {busy ? "A eliminar…" : "Eliminar definitivamente"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
