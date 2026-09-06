@@ -106,7 +106,7 @@ export const getImpact = createServerFn({ method: "POST" })
     return {
       title: (row as { title: string }).title,
       archived: Boolean((row as { archived_at: string | null }).archived_at),
-      courses: tree.courseIds.filter((c) => c !== data.id).length + (data.table === "cycles" ? 0 : 0),
+      courses: data.table === "cycles" ? tree.courseIds.length : 0,
       lessons: data.table === "lessons" ? 0 : tree.lessonIds.length,
       materials: data.table === "lesson_materials" ? 0 : tree.materialIds.length,
       comments,
