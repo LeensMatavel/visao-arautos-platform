@@ -3,7 +3,9 @@ import { useCallback, useEffect, useState } from "react";
 import { Check, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
 import { LoadingState } from "@/components/states";
+import { deleteComment, moderateComment } from "@/lib/moderation.functions";
 
 export const Route = createFileRoute("/admin/comentarios")({
   component: AdminComments,
@@ -21,6 +23,8 @@ type Row = {
 function AdminComments() {
   const [rows, setRows] = useState<Row[] | null>(null);
   const [error, setError] = useState(false);
+  const moderate = useServerFn(moderateComment);
+  const removeFn = useServerFn(deleteComment);
 
   const load = useCallback(async () => {
     const { data, error: err } = await supabase
@@ -37,18 +41,21 @@ function AdminComments() {
   }, [load]);
 
   async function setStatus(id: string, status: "approved" | "rejected") {
-    const { error: err } = await supabase
-      .from("lesson_comments")
-      .update({ status })
-      .eq("id", id);
-    if (err) return toast.error("Não foi possível actualizar o comentário.");
+    try {
+      await moderate({ data: { id, status } });
+    } catch {
+      return toast.error("Não foi possível actualizar o comentário.");
+    }
     setRows((r) => (r ?? []).map((c) => (c.id === id ? { ...c, status } : c)));
     toast.success(status === "approved" ? "Comentário aprovado." : "Comentário rejeitado.");
   }
 
   async function remove(id: string) {
-    const { error: err } = await supabase.from("lesson_comments").delete().eq("id", id);
-    if (err) return toast.error("Não foi possível remover o comentário.");
+    try {
+      await removeFn({ data: { id } });
+    } catch {
+      return toast.error("Não foi possível remover o comentário.");
+    }
     setRows((r) => (r ?? []).filter((c) => c.id !== id));
     toast.success("Comentário removido.");
   }
