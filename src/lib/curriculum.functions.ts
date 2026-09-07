@@ -199,6 +199,34 @@ export const purgeItem = createServerFn({ method: "POST" })
     const { error } = await admin.from(data.table).delete().eq("id", data.id);
     if (error) throw new Error(error.message);
 
+    const cascadeCourses = data.table === "cycles" ? tree.courseIds.length : 0;
+    const cascadeLessons = data.table === "lessons" ? 0 : tree.lessonIds.length;
+    const cascadeMaterials = data.table === "lesson_materials" ? 0 : tree.materialIds.length;
+
+    const { writeAudit } = await import("@/lib/audit.server");
+    await writeAudit(admin, {
+      actorId: (context as { userId: string }).userId,
+      actorRole: "admin",
+      action: "delete",
+      tableName: data.table,
+      recordId: data.id,
+      affectedCount: 1 + cascadeCourses + cascadeLessons + cascadeMaterials,
+      summary: {
+        title: item.title,
+        resource: data.table,
+        previousState: "arquivado",
+        newState: "eliminado",
+        dependents: {
+          courses: cascadeCourses,
+          lessons: cascadeLessons,
+          materials: cascadeMaterials,
+        },
+        progressRemoved,
+      },
+    });
+
+
+
     return {
       ok: true,
       title: item.title,
