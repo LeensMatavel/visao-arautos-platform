@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_role: Database["public"]["Enums"]["app_role"] | null
+          affected_count: number | null
+          created_at: string
+          id: string
+          record_id: string | null
+          summary: Json | null
+          table_name: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_role?: Database["public"]["Enums"]["app_role"] | null
+          affected_count?: number | null
+          created_at?: string
+          id?: string
+          record_id?: string | null
+          summary?: Json | null
+          table_name: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_role?: Database["public"]["Enums"]["app_role"] | null
+          affected_count?: number | null
+          created_at?: string
+          id?: string
+          record_id?: string | null
+          summary?: Json | null
+          table_name?: string
+        }
+        Relationships: []
+      }
       course_progress: {
         Row: {
           completed_at: string
