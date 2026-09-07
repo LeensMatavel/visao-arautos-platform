@@ -83,10 +83,33 @@ export const setUserRole = createServerFn({ method: "POST" })
     }
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+    const { data: before } = await supabaseAdmin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", data.userId);
+    const previous = (before ?? []).map((r) => r.role);
+
     await supabaseAdmin.from("user_roles").delete().eq("user_id", data.userId);
     const { error } = await supabaseAdmin
       .from("user_roles")
       .insert({ user_id: data.userId, role: data.role });
     if (error) throw new Error(error.message);
+
+    const { writeAudit } = await import("@/lib/audit.server");
+    await writeAudit(supabaseAdmin, {
+      actorId: context.userId,
+      actorRole: "admin",
+      action: "role_change",
+      tableName: "user_roles",
+      recordId: data.userId,
+      affectedCount: 1,
+      summary: {
+        targetUserId: data.userId,
+        previousRoles: previous,
+        newRole: data.role,
+      },
+    });
+
     return { ok: true };
   });
+

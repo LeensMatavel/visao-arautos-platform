@@ -3,7 +3,9 @@ import { useCallback, useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
 import { LoadingState } from "@/components/states";
+import { deletePrayerRequest } from "@/lib/moderation.functions";
 
 export const Route = createFileRoute("/admin/oracao")({
   component: AdminPrayers,
@@ -20,6 +22,7 @@ type Row = {
 function AdminPrayers() {
   const [rows, setRows] = useState<Row[] | null>(null);
   const [error, setError] = useState(false);
+  const removeFn = useServerFn(deletePrayerRequest);
 
   const load = useCallback(async () => {
     const { data, error: err } = await supabase
@@ -36,8 +39,11 @@ function AdminPrayers() {
   }, [load]);
 
   async function remove(id: string) {
-    const { error: err } = await supabase.from("prayer_requests").delete().eq("id", id);
-    if (err) return toast.error("Não foi possível remover o pedido.");
+    try {
+      await removeFn({ data: { id } });
+    } catch {
+      return toast.error("Não foi possível remover o pedido.");
+    }
     toast.success("Pedido removido.");
     setRows((r) => (r ?? []).filter((x) => x.id !== id));
   }

@@ -123,6 +123,12 @@ export const setArchived = createServerFn({ method: "POST" })
     const value = data.archived ? new Date().toISOString() : null;
     const tree = await collectTree(admin, data.table, data.id);
 
+    const { data: row } = await admin
+      .from(data.table)
+      .select("title")
+      .eq("id", data.id)
+      .maybeSingle();
+
     if (tree.materialIds.length)
       await admin.from("lesson_materials").update({ archived_at: value }).in("id", tree.materialIds);
     if (tree.lessonIds.length)
@@ -132,13 +138,33 @@ export const setArchived = createServerFn({ method: "POST" })
     if (tree.cycleIds.length)
       await admin.from("cycles").update({ archived_at: value }).in("id", tree.cycleIds);
 
-    return {
-      ok: true,
-      archived: data.archived,
-      affected:
-        tree.cycleIds.length + tree.courseIds.length + tree.lessonIds.length + tree.materialIds.length,
-    };
+    const affected =
+      tree.cycleIds.length + tree.courseIds.length + tree.lessonIds.length + tree.materialIds.length;
+
+    const { writeAudit } = await import("@/lib/audit.server");
+    await writeAudit(admin, {
+      actorId: (context as { userId: string }).userId,
+      actorRole: "admin",
+      action: data.archived ? "archive" : "restore",
+      tableName: data.table,
+      recordId: data.id,
+      affectedCount: affected,
+      summary: {
+        title: (row as { title?: string } | null)?.title ?? null,
+        resource: data.table,
+        previousState: data.archived ? "activo" : "arquivado",
+        newState: data.archived ? "arquivado" : "activo",
+        dependents: {
+          courses: data.table === "cycles" ? tree.courseIds.length : 0,
+          lessons: data.table === "lessons" ? 0 : tree.lessonIds.length,
+          materials: data.table === "lesson_materials" ? 0 : tree.materialIds.length,
+        },
+      },
+    });
+
+    return { ok: true, archived: data.archived, affected };
   });
+
 
 /** Eliminação definitiva: apenas admin e apenas depois de arquivado. */
 export const purgeItem = createServerFn({ method: "POST" })
@@ -172,6 +198,34 @@ export const purgeItem = createServerFn({ method: "POST" })
 
     const { error } = await admin.from(data.table).delete().eq("id", data.id);
     if (error) throw new Error(error.message);
+
+    const cascadeCourses = data.table === "cycles" ? tree.courseIds.length : 0;
+    const cascadeLessons = data.table === "lessons" ? 0 : tree.lessonIds.length;
+    const cascadeMaterials = data.table === "lesson_materials" ? 0 : tree.materialIds.length;
+
+    const { writeAudit } = await import("@/lib/audit.server");
+    await writeAudit(admin, {
+      actorId: (context as { userId: string }).userId,
+      actorRole: "admin",
+      action: "delete",
+      tableName: data.table,
+      recordId: data.id,
+      affectedCount: 1 + cascadeCourses + cascadeLessons + cascadeMaterials,
+      summary: {
+        title: item.title,
+        resource: data.table,
+        previousState: "arquivado",
+        newState: "eliminado",
+        dependents: {
+          courses: cascadeCourses,
+          lessons: cascadeLessons,
+          materials: cascadeMaterials,
+        },
+        progressRemoved,
+      },
+    });
+
+
 
     return {
       ok: true,
