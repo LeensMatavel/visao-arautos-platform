@@ -9,68 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SobreRouteImport } from './routes/sobre'
-import { Route as OracaoRouteImport } from './routes/oracao'
-import { Route as MissoesRouteImport } from './routes/missoes'
-import { Route as EventosRouteImport } from './routes/eventos'
-import { Route as EscolaRouteImport } from './routes/escola'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as ComunidadeRouteImport } from './routes/comunidade'
-import { Route as BlogRouteImport } from './routes/blog'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as EscolaIndexRouteImport } from './routes/escola.index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as ComunidadeRouteImport } from './routes/comunidade'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as EscolaRouteImport } from './routes/escola'
+import { Route as EventosRouteImport } from './routes/eventos'
+import { Route as MissoesRouteImport } from './routes/missoes'
+import { Route as OracaoRouteImport } from './routes/oracao'
+import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as EscolaCourseIdRouteImport } from './routes/escola.$courseId'
-import { Route as AdminUtilizadoresRouteImport } from './routes/admin.utilizadores'
-import { Route as AdminOracaoRouteImport } from './routes/admin.oracao'
-import { Route as AdminCursosRouteImport } from './routes/admin.cursos'
 import { Route as AdminComentariosRouteImport } from './routes/admin.comentarios'
+import { Route as AdminCursosRouteImport } from './routes/admin.cursos'
+import { Route as AdminOracaoRouteImport } from './routes/admin.oracao'
+import { Route as AdminUtilizadoresRouteImport } from './routes/admin.utilizadores'
+import { Route as EscolaIndexRouteImport } from './routes/escola.index'
+import { Route as EscolaCourseIdRouteImport } from './routes/escola.$courseId'
 
-const SobreRoute = SobreRouteImport.update({
-  id: '/sobre',
-  path: '/sobre',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OracaoRoute = OracaoRouteImport.update({
-  id: '/oracao',
-  path: '/oracao',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MissoesRoute = MissoesRouteImport.update({
-  id: '/missoes',
-  path: '/missoes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EventosRoute = EventosRouteImport.update({
-  id: '/eventos',
-  path: '/eventos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EscolaRoute = EscolaRouteImport.update({
-  id: '/escola',
-  path: '/escola',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ComunidadeRoute = ComunidadeRouteImport.update({
-  id: '/comunidade',
-  path: '/comunidade',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -78,34 +38,59 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EscolaIndexRoute = EscolaIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => EscolaRoute,
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComunidadeRoute = ComunidadeRouteImport.update({
+  id: '/comunidade',
+  path: '/comunidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EscolaRoute = EscolaRouteImport.update({
+  id: '/escola',
+  path: '/escola',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventosRoute = EventosRouteImport.update({
+  id: '/eventos',
+  path: '/eventos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissoesRoute = MissoesRouteImport.update({
+  id: '/missoes',
+  path: '/missoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OracaoRoute = OracaoRouteImport.update({
+  id: '/oracao',
+  path: '/oracao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SobreRoute = SobreRouteImport.update({
+  id: '/sobre',
+  path: '/sobre',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
-const EscolaCourseIdRoute = EscolaCourseIdRouteImport.update({
-  id: '/$courseId',
-  path: '/$courseId',
-  getParentRoute: () => EscolaRoute,
-} as any)
-const AdminUtilizadoresRoute = AdminUtilizadoresRouteImport.update({
-  id: '/utilizadores',
-  path: '/utilizadores',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminOracaoRoute = AdminOracaoRouteImport.update({
-  id: '/oracao',
-  path: '/oracao',
+const AdminComentariosRoute = AdminComentariosRouteImport.update({
+  id: '/comentarios',
+  path: '/comentarios',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminCursosRoute = AdminCursosRouteImport.update({
@@ -113,10 +98,25 @@ const AdminCursosRoute = AdminCursosRouteImport.update({
   path: '/cursos',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminComentariosRoute = AdminComentariosRouteImport.update({
-  id: '/comentarios',
-  path: '/comentarios',
+const AdminOracaoRoute = AdminOracaoRouteImport.update({
+  id: '/oracao',
+  path: '/oracao',
   getParentRoute: () => AdminRoute,
+} as any)
+const AdminUtilizadoresRoute = AdminUtilizadoresRouteImport.update({
+  id: '/utilizadores',
+  path: '/utilizadores',
+  getParentRoute: () => AdminRoute,
+} as any)
+const EscolaIndexRoute = EscolaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EscolaRoute,
+} as any)
+const EscolaCourseIdRoute = EscolaCourseIdRouteImport.update({
+  id: '/$courseId',
+  path: '/$courseId',
+  getParentRoute: () => EscolaRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -255,67 +255,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sobre': {
-      id: '/sobre'
-      path: '/sobre'
-      fullPath: '/sobre'
-      preLoaderRoute: typeof SobreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/oracao': {
-      id: '/oracao'
-      path: '/oracao'
-      fullPath: '/oracao'
-      preLoaderRoute: typeof OracaoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/missoes': {
-      id: '/missoes'
-      path: '/missoes'
-      fullPath: '/missoes'
-      preLoaderRoute: typeof MissoesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/eventos': {
-      id: '/eventos'
-      path: '/eventos'
-      fullPath: '/eventos'
-      preLoaderRoute: typeof EventosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/escola': {
-      id: '/escola'
-      path: '/escola'
-      fullPath: '/escola'
-      preLoaderRoute: typeof EscolaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/comunidade': {
-      id: '/comunidade'
-      path: '/comunidade'
-      fullPath: '/comunidade'
-      preLoaderRoute: typeof ComunidadeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -325,19 +269,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/escola/': {
-      id: '/escola/'
-      path: '/'
-      fullPath: '/escola/'
-      preLoaderRoute: typeof EscolaIndexRouteImport
-      parentRoute: typeof EscolaRoute
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comunidade': {
+      id: '/comunidade'
+      path: '/comunidade'
+      fullPath: '/comunidade'
+      preLoaderRoute: typeof ComunidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/escola': {
+      id: '/escola'
+      path: '/escola'
+      fullPath: '/escola'
+      preLoaderRoute: typeof EscolaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eventos': {
+      id: '/eventos'
+      path: '/eventos'
+      fullPath: '/eventos'
+      preLoaderRoute: typeof EventosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/missoes': {
+      id: '/missoes'
+      path: '/missoes'
+      fullPath: '/missoes'
+      preLoaderRoute: typeof MissoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oracao': {
+      id: '/oracao'
+      path: '/oracao'
+      fullPath: '/oracao'
+      preLoaderRoute: typeof OracaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sobre': {
+      id: '/sobre'
+      path: '/sobre'
+      fullPath: '/sobre'
+      preLoaderRoute: typeof SobreRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/': {
       id: '/admin/'
@@ -346,25 +339,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/escola/$courseId': {
-      id: '/escola/$courseId'
-      path: '/$courseId'
-      fullPath: '/escola/$courseId'
-      preLoaderRoute: typeof EscolaCourseIdRouteImport
-      parentRoute: typeof EscolaRoute
-    }
-    '/admin/utilizadores': {
-      id: '/admin/utilizadores'
-      path: '/utilizadores'
-      fullPath: '/admin/utilizadores'
-      preLoaderRoute: typeof AdminUtilizadoresRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/oracao': {
-      id: '/admin/oracao'
-      path: '/oracao'
-      fullPath: '/admin/oracao'
-      preLoaderRoute: typeof AdminOracaoRouteImport
+    '/admin/comentarios': {
+      id: '/admin/comentarios'
+      path: '/comentarios'
+      fullPath: '/admin/comentarios'
+      preLoaderRoute: typeof AdminComentariosRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/cursos': {
@@ -374,12 +353,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCursosRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/comentarios': {
-      id: '/admin/comentarios'
-      path: '/comentarios'
-      fullPath: '/admin/comentarios'
-      preLoaderRoute: typeof AdminComentariosRouteImport
+    '/admin/oracao': {
+      id: '/admin/oracao'
+      path: '/oracao'
+      fullPath: '/admin/oracao'
+      preLoaderRoute: typeof AdminOracaoRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/admin/utilizadores': {
+      id: '/admin/utilizadores'
+      path: '/utilizadores'
+      fullPath: '/admin/utilizadores'
+      preLoaderRoute: typeof AdminUtilizadoresRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/escola/': {
+      id: '/escola/'
+      path: '/'
+      fullPath: '/escola/'
+      preLoaderRoute: typeof EscolaIndexRouteImport
+      parentRoute: typeof EscolaRoute
+    }
+    '/escola/$courseId': {
+      id: '/escola/$courseId'
+      path: '/$courseId'
+      fullPath: '/escola/$courseId'
+      preLoaderRoute: typeof EscolaCourseIdRouteImport
+      parentRoute: typeof EscolaRoute
     }
   }
 }
