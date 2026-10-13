@@ -25,6 +25,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as EscolaCourseIdRouteImport } from './routes/escola.$courseId'
 import { Route as AdminUtilizadoresRouteImport } from './routes/admin.utilizadores'
 import { Route as AdminOracaoRouteImport } from './routes/admin.oracao'
+import { Route as AdminHistoricoRouteImport } from './routes/admin.historico'
 import { Route as AdminCursosRouteImport } from './routes/admin.cursos'
 import { Route as AdminComentariosRouteImport } from './routes/admin.comentarios'
 
@@ -108,6 +109,11 @@ const AdminOracaoRoute = AdminOracaoRouteImport.update({
   path: '/oracao',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminHistoricoRoute = AdminHistoricoRouteImport.update({
+  id: '/historico',
+  path: '/historico',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCursosRoute = AdminCursosRouteImport.update({
   id: '/cursos',
   path: '/cursos',
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/sobre': typeof SobreRoute
   '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/cursos': typeof AdminCursosRoute
+  '/admin/historico': typeof AdminHistoricoRoute
   '/admin/oracao': typeof AdminOracaoRoute
   '/admin/utilizadores': typeof AdminUtilizadoresRoute
   '/escola/$courseId': typeof EscolaCourseIdRoute
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/sobre': typeof SobreRoute
   '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/cursos': typeof AdminCursosRoute
+  '/admin/historico': typeof AdminHistoricoRoute
   '/admin/oracao': typeof AdminOracaoRoute
   '/admin/utilizadores': typeof AdminUtilizadoresRoute
   '/escola/$courseId': typeof EscolaCourseIdRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/sobre': typeof SobreRoute
   '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/cursos': typeof AdminCursosRoute
+  '/admin/historico': typeof AdminHistoricoRoute
   '/admin/oracao': typeof AdminOracaoRoute
   '/admin/utilizadores': typeof AdminUtilizadoresRoute
   '/escola/$courseId': typeof EscolaCourseIdRoute
@@ -194,6 +203,7 @@ export interface FileRouteTypes {
     | '/sobre'
     | '/admin/comentarios'
     | '/admin/cursos'
+    | '/admin/historico'
     | '/admin/oracao'
     | '/admin/utilizadores'
     | '/escola/$courseId'
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
     | '/sobre'
     | '/admin/comentarios'
     | '/admin/cursos'
+    | '/admin/historico'
     | '/admin/oracao'
     | '/admin/utilizadores'
     | '/escola/$courseId'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/sobre'
     | '/admin/comentarios'
     | '/admin/cursos'
+    | '/admin/historico'
     | '/admin/oracao'
     | '/admin/utilizadores'
     | '/escola/$courseId'
@@ -367,6 +379,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOracaoRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/historico': {
+      id: '/admin/historico'
+      path: '/historico'
+      fullPath: '/admin/historico'
+      preLoaderRoute: typeof AdminHistoricoRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/cursos': {
       id: '/admin/cursos'
       path: '/cursos'
@@ -387,6 +406,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminComentariosRoute: typeof AdminComentariosRoute
   AdminCursosRoute: typeof AdminCursosRoute
+  AdminHistoricoRoute: typeof AdminHistoricoRoute
   AdminOracaoRoute: typeof AdminOracaoRoute
   AdminUtilizadoresRoute: typeof AdminUtilizadoresRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -395,6 +415,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminComentariosRoute: AdminComentariosRoute,
   AdminCursosRoute: AdminCursosRoute,
+  AdminHistoricoRoute: AdminHistoricoRoute,
   AdminOracaoRoute: AdminOracaoRoute,
   AdminUtilizadoresRoute: AdminUtilizadoresRoute,
   AdminIndexRoute: AdminIndexRoute,

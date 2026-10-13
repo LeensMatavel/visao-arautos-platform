@@ -8,6 +8,7 @@ const tabs = [
   { to: "/admin/cursos", label: "Cursos e aulas" },
   { to: "/admin/comentarios", label: "Comentários" },
   { to: "/admin/oracao", label: "Pedidos de oração" },
+  { to: "/admin/historico", label: "Histórico" },
 ];
 
 export const Route = createFileRoute("/admin")({
