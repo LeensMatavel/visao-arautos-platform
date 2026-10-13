@@ -10,7 +10,7 @@ export type AuditRow = {
   action: string;
   tableName: string;
   recordId: string | null;
-  summary: Record<string, unknown> | null;
+  summary: Record<string, string | number | boolean | null | string[]> | null;
   affectedCount: number | null;
   createdAt: string;
 };
@@ -56,7 +56,7 @@ export const listAuditLog = createServerFn({ method: "POST" })
       action: r.action,
       tableName: r.table_name,
       recordId: r.record_id,
-      summary: (r.summary as Record<string, unknown> | null) ?? null,
+      summary: (r.summary as AuditRow["summary"]) ?? null,
       affectedCount: r.affected_count,
       createdAt: r.created_at,
     }));
