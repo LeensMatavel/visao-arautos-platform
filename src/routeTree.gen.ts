@@ -19,6 +19,7 @@ import { Route as EscolaRouteImport } from './routes/escola'
 import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as MissoesRouteImport } from './routes/missoes'
 import { Route as OracaoRouteImport } from './routes/oracao'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminComentariosRouteImport } from './routes/admin.comentarios'
@@ -79,6 +80,11 @@ const OracaoRoute = OracaoRouteImport.update({
   path: '/oracao',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SobreRoute = SobreRouteImport.update({
   id: '/sobre',
   path: '/sobre',
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/eventos': typeof EventosRoute
   '/missoes': typeof MissoesRoute
   '/oracao': typeof OracaoRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sobre': typeof SobreRoute
   '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/cursos': typeof AdminCursosRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/eventos': typeof EventosRoute
   '/missoes': typeof MissoesRoute
   '/oracao': typeof OracaoRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sobre': typeof SobreRoute
   '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/cursos': typeof AdminCursosRoute
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/eventos': typeof EventosRoute
   '/missoes': typeof MissoesRoute
   '/oracao': typeof OracaoRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sobre': typeof SobreRoute
   '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/cursos': typeof AdminCursosRoute
@@ -200,6 +209,7 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/missoes'
     | '/oracao'
+    | '/reset-password'
     | '/sobre'
     | '/admin/comentarios'
     | '/admin/cursos'
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/missoes'
     | '/oracao'
+    | '/reset-password'
     | '/sobre'
     | '/admin/comentarios'
     | '/admin/cursos'
@@ -240,6 +251,7 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/missoes'
     | '/oracao'
+    | '/reset-password'
     | '/sobre'
     | '/admin/comentarios'
     | '/admin/cursos'
@@ -262,6 +274,7 @@ export interface RootRouteChildren {
   EventosRoute: typeof EventosRoute
   MissoesRoute: typeof MissoesRoute
   OracaoRoute: typeof OracaoRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SobreRoute: typeof SobreRoute
 }
 
@@ -335,6 +348,13 @@ declare module '@tanstack/react-router' {
       path: '/oracao'
       fullPath: '/oracao'
       preLoaderRoute: typeof OracaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sobre': {
@@ -447,6 +467,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventosRoute: EventosRoute,
   MissoesRoute: MissoesRoute,
   OracaoRoute: OracaoRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SobreRoute: SobreRoute,
 }
 export const routeTree = rootRouteImport
