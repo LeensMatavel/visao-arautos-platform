@@ -24,6 +24,7 @@ type AuthContextValue = {
   register: (name: string, email: string, password: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -91,9 +92,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   }, []);
 
+  const resetPassword = useCallback(async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) throw error;
+  }, []);
+
   return (
     <AuthContext.Provider
-      value={{ user, session, loading, login, register, loginWithGoogle, logout }}
+      value={{ user, session, loading, login, register, loginWithGoogle, logout, resetPassword }}
     >
       {children}
     </AuthContext.Provider>
