@@ -8,6 +8,7 @@ import { EmptyState, LoadingState } from "@/components/states";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/oracao")({
   head: () => ({
@@ -25,7 +26,6 @@ export const Route = createFileRoute("/oracao")({
 
 type Prayer = {
   id: string;
-  user_id: string | null;
   display_name: string;
   body: string;
   prayed_count: number;
@@ -36,13 +36,14 @@ function OracaoPage() {
   const { user } = useAuth();
   const [prayers, setPrayers] = useState<Prayer[]>([]);
   const [mine, setMine] = useState<Set<string>>(new Set());
+  const [owned, setOwned] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
 
   const load = useCallback(async () => {
     const { data, error } = await supabase
       .from("prayer_requests")
-      .select("id, user_id, display_name, body, prayed_count, created_at")
+      .select("id, display_name, body, prayed_count, created_at")
       .order("created_at", { ascending: false })
       .limit(60);
     if (error) toast.error("Não foi possível carregar os pedidos.");
@@ -50,12 +51,16 @@ function OracaoPage() {
     setLoading(false);
 
     if (user) {
-      const { data: rows } = await supabase
-        .from("prayer_intercessions")
-        .select("request_id");
+      const [{ data: rows }, { data: ownRows, error: ownError }] = await Promise.all([
+        supabase.from("prayer_intercessions").select("request_id"),
+        supabase.rpc("own_prayer_request_ids"),
+      ]);
       setMine(new Set((rows ?? []).map((r) => r.request_id)));
+      setOwned(new Set((ownRows ?? []).map((r) => r.id)));
+      if (ownError) toast.error("Não foi possível identificar os seus pedidos.");
     } else {
       setMine(new Set());
+      setOwned(new Set());
     }
   }, [user]);
 
@@ -177,14 +182,17 @@ function OracaoPage() {
                       </p>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
-                      {user && p.user_id === user.id && (
-                        <button
+                      {user && owned.has(p.id) && (
+                        <Button
                           onClick={() => remove(p.id)}
                           aria-label="Remover o meu pedido"
+                          title="Remover o meu pedido"
+                          variant="outline"
+                          size="icon"
                           className="border-border text-muted-foreground hover:text-foreground rounded-full border p-2"
                         >
                           <Trash2 className="h-4 w-4" />
-                        </button>
+                        </Button>
                       )}
                       <button
                         onClick={() => prayFor(p.id)}
