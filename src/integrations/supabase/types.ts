@@ -414,6 +414,12 @@ export type Database = {
         }
         Returns: boolean
       }
+      own_prayer_request_ids: {
+        Args: never
+        Returns: {
+          id: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

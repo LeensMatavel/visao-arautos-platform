@@ -8,6 +8,14 @@ import { LoadingState } from "@/components/states";
 import { deletePrayerRequest } from "@/lib/moderation.functions";
 
 export const Route = createFileRoute("/admin/oracao")({
+  head: () => ({ meta: [
+    { title: "Gestão de pedidos de oração — Visão Arautos" },
+    { name: "description", content: "Revisão dos pedidos de oração pela equipa Arautos." },
+    { property: "og:title", content: "Gestão de pedidos de oração — Visão Arautos" },
+    { property: "og:description", content: "Revisão dos pedidos de oração pela equipa Arautos." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AdminPrayers,
 });
 

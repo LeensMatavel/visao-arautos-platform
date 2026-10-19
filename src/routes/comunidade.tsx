@@ -9,6 +9,10 @@ export const Route = createFileRoute("/comunidade")({
     meta: [
       { title: "Comunidade — Visão Arautos" },
       { name: "description", content: "Grupos de estudo, fóruns e vida em comunidade." },
+      { property: "og:title", content: "Comunidade — Visão Arautos" },
+      { property: "og:description", content: "Grupos de estudo, fóruns e vida em comunidade." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ComunidadePage,

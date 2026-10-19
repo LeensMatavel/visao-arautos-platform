@@ -7,6 +7,14 @@ import { LoadingState } from "@/components/states";
 import { useRoles, roleLabel, type AppRole } from "@/lib/roles";
 
 export const Route = createFileRoute("/admin/utilizadores")({
+  head: () => ({ meta: [
+    { title: "Gestão de utilizadores — Visão Arautos" },
+    { name: "description", content: "Gestão dos utilizadores e papéis da plataforma Arautos." },
+    { property: "og:title", content: "Gestão de utilizadores — Visão Arautos" },
+    { property: "og:description", content: "Gestão dos utilizadores e papéis da plataforma Arautos." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AdminUsers,
 });
 

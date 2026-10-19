@@ -9,6 +9,10 @@ export const Route = createFileRoute("/missoes")({
     meta: [
       { title: "Missões — Visão Arautos" },
       { name: "description", content: "Projetos missionários apoiados pelo movimento Arautos." },
+      { property: "og:title", content: "Missões — Visão Arautos" },
+      { property: "og:description", content: "Projetos missionários apoiados pelo movimento Arautos." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: MissoesPage,

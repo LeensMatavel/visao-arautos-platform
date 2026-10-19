@@ -6,6 +6,14 @@ import { LoadingState } from "@/components/states";
 import { getPlatformReport } from "@/lib/reports.functions";
 
 export const Route = createFileRoute("/admin/")({
+  head: () => ({ meta: [
+    { title: "Visão geral da administração — Visão Arautos" },
+    { name: "description", content: "Indicadores da formação e da comunidade Arautos para a equipa." },
+    { property: "og:title", content: "Visão geral da administração — Visão Arautos" },
+    { property: "og:description", content: "Indicadores da formação e da comunidade Arautos para a equipa." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AdminOverview,
 });
 
