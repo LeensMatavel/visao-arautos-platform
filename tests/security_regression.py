@@ -8,6 +8,7 @@ import json
 import os
 import unittest
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
 
@@ -42,7 +43,7 @@ class SecurityRegression(unittest.TestCase):
     def tearDown(self):
         # Delete only this run's fixtures, never real community records.
         for table in ("lesson_comments", "prayer_requests"):
-            api("/rest/v1/" + table + "?body=eq." + urllib.parse.quote(self.marker),
+            api("/rest/v1/" + table + "?select=id&body=eq." + urllib.parse.quote(self.marker),
                 self.admin, "DELETE")
 
     def comment(self, **extra):
@@ -53,6 +54,14 @@ class SecurityRegression(unittest.TestCase):
         status, _ = api("/rest/v1/lesson_comments", self.student, "POST",
                         self.comment(status="approved"))
         self.assertEqual(status, 403)
+
+    def test_moderator_can_approve_a_pending_comment(self):
+        status, rows = api("/rest/v1/lesson_comments", self.student, "POST", self.comment())
+        self.assertEqual(status, 201)
+        path = "/rest/v1/lesson_comments?id=eq." + rows[0]["id"]
+        status, _ = api(path, os.environ["TEST_MODERATOR_TOKEN"], "PATCH", {"status": "approved"})
+        self.assertEqual(status, 200)
+        self.assertEqual(api(path)[1][0]["status"], "approved")
 
     def test_student_cannot_approve_own_pending_comment(self):
         status, rows = api("/rest/v1/lesson_comments", self.student, "POST", self.comment())
