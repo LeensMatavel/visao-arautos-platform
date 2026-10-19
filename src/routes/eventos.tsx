@@ -9,6 +9,10 @@ export const Route = createFileRoute("/eventos")({
     meta: [
       { title: "Eventos — Visão Arautos" },
       { name: "description", content: "Vigílias, conferências e encontros do movimento Arautos." },
+      { property: "og:title", content: "Eventos — Visão Arautos" },
+      { property: "og:description", content: "Vigílias, conferências e encontros do movimento Arautos." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: EventosPage,

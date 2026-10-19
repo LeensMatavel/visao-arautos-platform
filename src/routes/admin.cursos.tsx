@@ -23,6 +23,14 @@ import {
 } from "@/lib/curriculum.functions";
 
 export const Route = createFileRoute("/admin/cursos")({
+  head: () => ({ meta: [
+    { title: "Gestão da Escola Arautos — Visão Arautos" },
+    { name: "description", content: "Gestão dos ciclos, cursos, aulas e materiais da Escola Arautos." },
+    { property: "og:title", content: "Gestão da Escola Arautos — Visão Arautos" },
+    { property: "og:description", content: "Gestão dos ciclos, cursos, aulas e materiais da Escola Arautos." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AdminCourses,
 });
 

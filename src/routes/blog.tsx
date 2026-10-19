@@ -8,6 +8,10 @@ export const Route = createFileRoute("/blog")({
     meta: [
       { title: "Blog — Visão Arautos" },
       { name: "description", content: "Reflexões, ensinos e testemunhos do movimento Arautos." },
+      { property: "og:title", content: "Blog — Visão Arautos" },
+      { property: "og:description", content: "Reflexões, ensinos e testemunhos do movimento Arautos." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: BlogPage,

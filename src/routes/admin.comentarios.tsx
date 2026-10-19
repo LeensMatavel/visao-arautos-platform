@@ -8,6 +8,14 @@ import { LoadingState } from "@/components/states";
 import { deleteComment, moderateComment } from "@/lib/moderation.functions";
 
 export const Route = createFileRoute("/admin/comentarios")({
+  head: () => ({ meta: [
+    { title: "Moderação de comentários — Visão Arautos" },
+    { name: "description", content: "Revisão dos comentários das aulas pela equipa Arautos." },
+    { property: "og:title", content: "Moderação de comentários — Visão Arautos" },
+    { property: "og:description", content: "Revisão dos comentários das aulas pela equipa Arautos." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AdminComments,
 });
 

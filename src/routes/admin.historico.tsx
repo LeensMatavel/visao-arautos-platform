@@ -5,6 +5,14 @@ import { LoadingState } from "@/components/states";
 import { listAuditLog, type AuditRow } from "@/lib/audit.functions";
 
 export const Route = createFileRoute("/admin/historico")({
+  head: () => ({ meta: [
+    { title: "Histórico administrativo — Visão Arautos" },
+    { name: "description", content: "Histórico das operações administrativas da plataforma Arautos." },
+    { property: "og:title", content: "Histórico administrativo — Visão Arautos" },
+    { property: "og:description", content: "Histórico das operações administrativas da plataforma Arautos." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AdminHistory,
 });
 
