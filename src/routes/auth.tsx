@@ -5,7 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 
 const search = z.object({
-  mode: z.enum(["login", "register"]).optional(),
+  mode: z.enum(["login", "register", "forgot"]).optional(),
 });
 
 export const Route = createFileRoute("/auth")({
@@ -28,8 +28,47 @@ function AuthPage() {
   const { mode = "login" } = Route.useSearch();
   const isRegister = mode === "register";
   const navigate = useNavigate();
-  const { login, register, loginWithGoogle } = useAuth();
+  const { login, register, loginWithGoogle, resetPassword } = useAuth();
   const [loading, setLoading] = useState(false);
+
+  if (mode === "forgot") {
+    return (
+      <div className="bg-hero flex min-h-screen items-center justify-center px-4">
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const email = String(new FormData(e.currentTarget).get("email") || "");
+            if (!email) return toast.error("Indique o seu email.");
+            setLoading(true);
+            try {
+              await resetPassword(email);
+              toast.success("Se a conta existir, receberá um email com a ligação de recuperação.");
+            } catch (err) {
+              toast.error(err instanceof Error ? err.message : "Não foi possível enviar o email.");
+            } finally {
+              setLoading(false);
+            }
+          }}
+          className="border-border/60 bg-card/70 w-full max-w-md space-y-4 rounded-2xl border p-8 shadow-elegant backdrop-blur-xl"
+        >
+          <p className="text-primary text-xs tracking-[0.3em] uppercase">Recuperação</p>
+          <h1 className="font-display text-3xl">Esqueceu a palavra-passe?</h1>
+          <Field label="Email" name="email" type="email" />
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-gold text-primary-foreground w-full rounded-full py-3.5 text-sm font-medium shadow-gold disabled:opacity-60"
+          >
+            {loading ? "Aguarde..." : "Enviar ligação de recuperação"}
+          </button>
+          <Link to="/auth" search={{ mode: "login" }} className="text-primary block text-center text-sm">
+            Voltar a entrar
+          </Link>
+        </form>
+      </div>
+    );
+  }
+
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -121,6 +160,11 @@ function AuthPage() {
                 )}
                 <Field label="Email" name="email" type="email" />
                 <Field label="Palavra-passe" name="password" type="password" />
+                {!isRegister && (
+                  <Link to="/auth" search={{ mode: "forgot" }} className="text-primary block text-right text-xs">
+                    Esqueceu a palavra-passe?
+                  </Link>
+                )}
 
                 <button
                   type="submit"
