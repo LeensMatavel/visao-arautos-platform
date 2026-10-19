@@ -94,8 +94,9 @@ class SecurityRegression(unittest.TestCase):
         self.assertEqual(public[0]["display_name"], "Anónimo")
         self.assertNotIn("user_id", public[0])
         for token in (None, self.student, self.admin):
-            self.assertEqual(api(path + "&select=user_id", token)[0], 403)
-            self.assertEqual(api(path + "&select=*", token)[0], 403)
+            denied = 403 if token else 401
+            self.assertEqual(api(path + "&select=user_id", token)[0], denied)
+            self.assertEqual(api(path + "&select=*", token)[0], denied)
         status, owned = api("/rest/v1/rpc/own_prayer_request_ids", self.student, "POST", {})
         self.assertEqual(status, 200)
         self.assertIn({"id": prayer_id}, owned)
