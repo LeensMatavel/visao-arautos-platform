@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
-import { useAuth } from "@/lib/auth-context";
+import { authErrorMessage, logAuthError, useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 
 const search = z.object({
@@ -44,7 +44,8 @@ function AuthPage() {
               await resetPassword(email);
               toast.success("Se a conta existir, receberá um email com a ligação de recuperação.");
             } catch (err) {
-              toast.error(err instanceof Error ? err.message : "Não foi possível enviar o email.");
+              logAuthError(err, "recovery");
+              toast.error(authErrorMessage(err, "recovery"));
             } finally {
               setLoading(false);
             }
@@ -53,7 +54,7 @@ function AuthPage() {
         >
           <p className="text-primary text-xs tracking-[0.3em] uppercase">Recuperação</p>
           <h1 className="font-display text-3xl">Esqueceu a palavra-passe?</h1>
-          <Field label="Email" name="email" type="email" />
+          <Field label="Email" name="email" type="email" required />
           <button
             type="submit"
             disabled={loading}
@@ -83,17 +84,21 @@ function AuthPage() {
     setLoading(true);
     try {
       if (isRegister) {
-        await register(name, email, password);
-        toast.success("Conta criada. Verifique o seu email para confirmar.");
+        const hasSession = await register(name, email, password);
+        if (!hasSession) {
+          toast.success("Conta criada. Verifique o seu email para confirmar antes de entrar.");
+          return;
+        }
+        toast.success("Conta criada com sucesso.");
       } else {
         await login(email, password);
         toast.success("Bem-vindo de volta.");
       }
       navigate({ to: "/dashboard" });
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Não foi possível autenticar.",
-      );
+      const flow = isRegister ? "register" : "login";
+      logAuthError(error, flow);
+      toast.error(authErrorMessage(error, flow));
     } finally {
       setLoading(false);
     }
@@ -103,8 +108,9 @@ function AuthPage() {
     setLoading(true);
     try {
       await loginWithGoogle();
-    } catch {
-      toast.error("Não foi possível entrar com o Google.");
+    } catch (error) {
+      logAuthError(error, "google");
+      toast.error(authErrorMessage(error, "google"));
     } finally {
       setLoading(false);
     }
@@ -156,10 +162,10 @@ function AuthPage() {
 
               <form onSubmit={handleSubmit} className="mt-8 space-y-4">
                 {isRegister && (
-                  <Field label="Nome completo" name="name" type="text" />
+                  <Field label="Nome completo" name="name" type="text" required />
                 )}
-                <Field label="Email" name="email" type="email" />
-                <Field label="Palavra-passe" name="password" type="password" />
+                <Field label="Email" name="email" type="email" required />
+                <Field label="Palavra-passe" name="password" type="password" required />
                 {!isRegister && (
                   <Link to="/auth" search={{ mode: "forgot" }} className="text-primary block text-right text-xs">
                     Esqueceu a palavra-passe?
@@ -222,10 +228,12 @@ function Field({
   label,
   name,
   type,
+  required = false,
 }: {
   label: string;
   name: string;
   type: string;
+  required?: boolean;
 }) {
   return (
     <label className="block">
@@ -235,6 +243,7 @@ function Field({
       <input
         name={name}
         type={type}
+        required={required}
         className="border-border bg-background/60 focus:border-gold focus:ring-primary/20 w-full rounded-lg border px-4 py-3 text-sm outline-none focus:ring-2"
       />
     </label>

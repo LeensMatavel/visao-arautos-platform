@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { authErrorMessage, logAuthError } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
@@ -25,12 +26,27 @@ function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const isRecovery = window.location.hash.includes("type=recovery");
+    const query = new URLSearchParams(window.location.search);
+    const hash = new URLSearchParams(window.location.hash.slice(1));
+    const isRecovery = hash.get("type") === "recovery";
+    const hasLinkError = [query, hash].some((params) => params.has("error") || params.has("error_code"));
+    if (hasLinkError) {
+      setInvalid(true);
+      return;
+    }
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") setReady(true);
     });
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        logAuthError(error, "password-update");
+        setInvalid(true);
+        return;
+      }
       if (data.session && isRecovery) setReady(true);
+    }).catch((error: unknown) => {
+      logAuthError(error, "password-update");
+      setInvalid(true);
     });
     const t = setTimeout(() => {
       setReady((r) => {
@@ -52,11 +68,21 @@ function ResetPasswordPage() {
     if (password.length < 8) return toast.error("A palavra-passe deve ter pelo menos 8 caracteres.");
     if (password !== confirm) return toast.error("As palavras-passe não coincidem.");
     setLoading(true);
-    const { error } = await supabase.auth.updateUser({ password });
-    setLoading(false);
-    if (error) return toast.error(error.message);
-    toast.success("Palavra-passe atualizada.");
-    navigate({ to: "/dashboard" });
+    try {
+      const { error } = await supabase.auth.updateUser({ password });
+      if (error) {
+        logAuthError(error, "password-update");
+        toast.error(authErrorMessage(error, "password-update"));
+        return;
+      }
+      toast.success("Palavra-passe actualizada. Já pode continuar.");
+      navigate({ to: "/dashboard" });
+    } catch (error) {
+      logAuthError(error, "password-update");
+      toast.error(authErrorMessage(error, "password-update"));
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
